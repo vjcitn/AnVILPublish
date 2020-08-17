@@ -137,7 +137,7 @@ package_source_as_workspace <-
     .set_dashboard(dashboard, namespace, name)
 
     ## build vignettes and add to workspace
-    vignettes_to_notebooks(path, namespace, name)
+    vignettes_to_notebooks(path, namespace, name, create = FALSE, update = TRUE)
 
     wkspc <-
         paste0("https://anvil.terra.bio/#workspaces/", namespace, "/", name)
