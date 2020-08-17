@@ -1,0 +1,31 @@
+Package: AnVILPublish
+Title: Publish Packages and Other Resources to AnVIL Workspaces
+Version: 0.0.1
+Authors@R: 
+    person(
+        given = "Martin",
+        family = "Morgan",
+        role = c("aut", "cre"),
+        email = "Martin.Morgan@RoswellPark.org",
+        comment = c(ORCID = "0000-0002-5874-8148")
+    )
+Description:
+    Use this package to create or update AnVIL workspaces from
+    resources such as R / Bioconductor packages. The metadata about
+    the package (e.g., select information from the package DESCRIPTION
+    file and from vignette YAML headings) are used to populate the
+    'DASHBOARD'. Vignettes are translated to python notebooks ready
+    for evaluation in AnVIL.
+License: Artistic-2.0
+Imports:
+    AnVIL,
+    httr,
+    rmarkdown,
+    whisker,
+    tools,
+    utils,
+    stats
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
