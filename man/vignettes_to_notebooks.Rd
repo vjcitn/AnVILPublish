@@ -4,7 +4,7 @@
 \alias{vignettes_to_notebooks}
 \title{Render vignettes as .ipynb notebooks}
 \usage{
-vignettes_to_notebooks(path, namespace, name)
+vignettes_to_notebooks(path, namespace, name, create = FALSE, update = FALSE)
 }
 \arguments{
 \item{path}{\code{character(1)} path to the location of the package
@@ -14,6 +14,12 @@ source code.}
 to be used.}
 
 \item{name}{\code{character(1)} AnVIL workspace name.}
+
+\item{create}{\code{logical(1)} Create a new project?}
+
+\item{update}{\code{logical(1)} Update (over-write any similarly named
+notebooks) an existing workspace?  One of \code{create} and \code{update}
+must be TRUE.}
 }
 \description{
 \code{vignettes_to_notebooks()} renders .Rmd vignettes as

@@ -4,7 +4,13 @@
 \alias{package_source_as_workspace}
 \title{Render R packages as AnVIL workspaces}
 \usage{
-package_source_as_workspace(path, namespace, name, create = FALSE)
+package_source_as_workspace(
+  path,
+  namespace,
+  name,
+  create = FALSE,
+  update = FALSE
+)
 }
 \arguments{
 \item{path}{\code{character(1)} path to the location of the package
@@ -15,8 +21,11 @@ to be used.}
 
 \item{name}{\code{character(1)} AnVIL workspace name.}
 
-\item{create}{\code{logical(1)} Create a new project? If \code{FALSE}, an
-existing project will be over-written!}
+\item{create}{\code{logical(1)} Create a new project?}
+
+\item{update}{\code{logical(1)} Update (over-write teh existing
+DASHBOARD and any similarly named notebooks) an existing
+workspace?  One of \code{create} and \code{update} must be TRUE.}
 }
 \value{
 \code{package_source_as_workspace()} returns the URL of the
