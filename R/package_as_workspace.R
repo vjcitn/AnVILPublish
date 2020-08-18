@@ -20,6 +20,19 @@
         .stop(response, namespace, name, "create workspace failed")
 }
 
+.package_name_from_path <-
+    function(path)
+{
+    package <- basename(path)
+    directory <- dirname(path)
+    descr <- tryCatch({
+        packageDescription(package, directory)
+    }, warning = function(w) {
+        stop("no package found at '", path, "'", call. = FALSE)
+    })
+    descr$Package
+}
+
 #' @importFrom utils packageDescription citation
 #'
 #' @importFrom stats setNames
@@ -65,7 +78,7 @@
 {
     setAttributes <- .get_terra()$setAttributes
     response <- setAttributes(
-        namespace, name, 
+        namespace, name,
         list(description = dashboard)
     )
     if (status_code(response) >= 400L)
@@ -92,7 +105,10 @@
 #' @param namespace `character(1)` AnVIL namespace (billing project)
 #'     to be used.
 #'
-#' @param name `character(1)` AnVIL workspace name.
+#' @param name `character(1)` AnVIL workspace name or NULL. If NULL,
+#'     the workspace name is set to
+#'     `"Bioconductor-Package-<pkgname>"`, where `<pkgname>` is the
+#'     name of the package (from the DESCRIPTION file) at `path`.
 #'
 #' @param create `logical(1)` Create a new project?
 #'
@@ -107,21 +123,25 @@
 #'
 #' @export
 package_source_as_workspace <-
-    function(path, namespace, name, create = FALSE, update = FALSE)
+    function(path, namespace, name = NULL, create = FALSE, update = FALSE)
 {
     stopifnot(
         .is_scalar_character(path), dir.exists(path),
         .is_scalar_character(namespace),
-        .is_scalar_character(name),
+        .is_scalar_character(name) || is.null(name),
         .is_scalar_logical(create),
-        .is_scalar_logical(overwrite)
+        .is_scalar_logical(update)
     )
 
+    if (is.null(name))
+        name <- paste0("Bioconductor-Package-", .package_name_from_path(path))
+
     ## create / update workspace
-    if (create)
+    if (create) {
         .create_workspace(namespace, name)
-    if (!create && !update)
-        stop("'create' a new workspace, or 'update' and existing one")
+    } else if (!update) {
+        stop("'create' a new workspace, or 'update' an existing one")
+    }
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)

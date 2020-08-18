@@ -4,7 +4,13 @@
 \alias{vignettes_to_notebooks}
 \title{Render vignettes as .ipynb notebooks}
 \usage{
-vignettes_to_notebooks(path, namespace, name, create = FALSE, update = FALSE)
+vignettes_to_notebooks(
+  path,
+  namespace,
+  name = NULL,
+  create = FALSE,
+  update = FALSE
+)
 }
 \arguments{
 \item{path}{\code{character(1)} path to the location of the package
@@ -13,7 +19,10 @@ source code.}
 \item{namespace}{\code{character(1)} AnVIL namespace (billing project)
 to be used.}
 
-\item{name}{\code{character(1)} AnVIL workspace name.}
+\item{name}{\code{character(1)} AnVIL workspace name or NULL. If NULL,
+the workspace name is set to
+\code{"Bioconductor-Package-<pkgname>"}, where \verb{<pkgname>} is the
+name of the package (from the DESCRIPTION file) at \code{path}.}
 
 \item{create}{\code{logical(1)} Create a new project?}
 

@@ -7,7 +7,7 @@
 package_source_as_workspace(
   path,
   namespace,
-  name,
+  name = NULL,
   create = FALSE,
   update = FALSE
 )
@@ -19,7 +19,10 @@ source code.}
 \item{namespace}{\code{character(1)} AnVIL namespace (billing project)
 to be used.}
 
-\item{name}{\code{character(1)} AnVIL workspace name.}
+\item{name}{\code{character(1)} AnVIL workspace name or NULL. If NULL,
+the workspace name is set to
+\code{"Bioconductor-Package-<pkgname>"}, where \verb{<pkgname>} is the
+name of the package (from the DESCRIPTION file) at \code{path}.}
 
 \item{create}{\code{logical(1)} Create a new project?}
 

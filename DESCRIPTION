@@ -1,6 +1,6 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 0.0.3
+Version: 0.0.4
 Authors@R: 
     person(
         given = "Martin",
