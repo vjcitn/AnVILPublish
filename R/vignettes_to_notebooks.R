@@ -2,7 +2,7 @@
     function(path)
 {
     vignette_path <- file.path(path, "vignettes")
-    vignettes <- dir(vignette_path, pattern = "\\.[Rr]md", full = TRUE)
+    vignettes <- dir(vignette_path, pattern = "\\.[Rr]md", full.names = TRUE)
     sort(vignettes)
 }
 

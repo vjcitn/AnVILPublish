@@ -22,7 +22,7 @@
 {
     message <- content(response)$message
     if (is.null(message))
-        message <- paste(as.character(content(respnse)), collapse = "\n")
+        message <- paste(as.character(content(response)), collapse = "\n")
     stop(
         text,
         "\nworkspace: ", namespace, "/", name,

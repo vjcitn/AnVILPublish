@@ -64,7 +64,8 @@
 .rmd_vignette_description <-
     function(path)
 {
-    rmd <- dir(file.path(path, "vignettes"), pattern = "[Rr]md", full = TRUE)
+    rmd_path <- file.path(path, "vignettes")
+    rmd <- dir(rmd_path, pattern = "[Rr]md", full.names = TRUE)
     yaml <- lapply(rmd, yaml_front_matter)
     vignette_description <- list(Vignettes = yaml)
     ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
