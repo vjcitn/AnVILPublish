@@ -69,28 +69,30 @@ From package source
 The one-stop route is to create a workspace from the package source
 (e.g., github checkout) directory use `package_source_as_workspace()`.
 
-    package_source_as_workspace(
+    AnVILPublish::package_source_as_workspace(
         "path/to/package",
         "bioconductor-rpci-anvil",     # i.e., billing account
-        "Bioconductor-package-Gen3",   # workspace name
         create = TRUE
     )
 
 Use `create = TRUE` to create a new workspace. Use `update = TRUE` to
 update (and potentially overwrite) an existing workspace. One of
-`create` and `update` must be TRUE.
+`create` and `update` must be TRUE. The command illustrated above does
+not specify the `name =` argument, so creates or updates a workspace
+`"Bioconductor-Package-<pkgname>`, where `<pkgname>` is the name of the
+package read from the DESCRIPTION file; provide an explict name to
+create or update an arbitrary workspace.
 
 Transforming vignettes to notebooks may require several iterations, and
 is available as a separate operation.
 
-    vignettes_to_notebooks(
+    AnVIL::Publish::vignettes_to_notebooks(
         "path/to/package",
         "bioconductor-rpci-anvil",     # i.e., billing account
-        "Bioconductor-package-Gen3",   # workspace name
         update = TRUE
     )
 
-The vignette transformation process as several limitations. Only `.Rmd`
+The vignette transformation process has several limitations. Only `.Rmd`
 vignettes are supported. Currently, the vignette is transformed first to
 a markdown document using the `rmarkdown` command
 `render(..., md_document())`. The markdown document is then translated
