@@ -1,3 +1,16 @@
+#' @importFrom AnVIL Terra
+.get_terra <- local({
+    terra <- NULL
+    renew <- NULL
+    function() {
+        if (is.null(terra) || Sys.time() > renew) {
+            renew <<- Sys.time() + 3600L
+            terra <<- Terra()
+        }
+        terra
+    }
+})
+
 .is_scalar <-
     function(x)
 {

@@ -1,13 +1,3 @@
-#' @importFrom AnVIL Terra
-.get_terra <- local({
-    terra <- NULL
-    function() {
-        if (is.null(terra))
-            terra <<- Terra()
-        terra
-    }
-})
-
 .create_workspace <-
     function(namespace, name)
 {
