@@ -133,6 +133,8 @@ package_source_as_workspace <-
         stop("'create' a new workspace, or 'update' an existing one")
     }
 
+    bioconductor_user_access(namespace, name)
+
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
     vignette_description <- .rmd_vignette_description(path)

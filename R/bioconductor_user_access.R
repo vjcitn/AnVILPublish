@@ -1,0 +1,47 @@
+.BIOCONDUCTOR_USER <- "Bioconductor_User@firecloud.org"
+
+.update_workspace_acl <-
+    function(namespace, name)
+{
+    updateWorkspaceACL <- .get_terra()$updateWorkspaceACL
+    properties <- list(list(
+        accessLevel = "READER",
+        canCompute = FALSE,
+        canShare = TRUE,
+        email = .BIOCONDUCTOR_USER
+    ))
+    response <- updateWorkspaceACL(
+        namespace, name,
+        body = properties
+    )
+    if (status_code(response) >= 400L)
+        .stop(response, namespace, name, "update workspace permissions failed")
+}
+
+#' @rdname bioconductor_user_access
+#'
+#' @title Add Bioconductor_User group to workspace access
+#'
+#' @description `bioconductor_user_access()` adds the
+#'     `Bioconductor_User` group to a workspace with `READER`
+#'     permissions. Users gain access to the workspace (and others) by
+#'     being added to the Bioconductor_User group.
+#'
+#' @param namespace character(1) namespace (billing account) under
+#'     which the workspace belongs.
+#'
+#' @param name character(1) name of the workspace to add access
+#'     credentials.
+#'
+#' @return `bioconductor_user_access()` returns NULL, invisibly.
+#'
+#' @export
+bioconductor_user_access <-
+    function(namespace, name)
+{
+    stopifnot(
+        .is_scalar_character(namespace),
+        .is_scalar_character(name)
+    )
+    .update_workspace_acl(namespace, name)
+}
