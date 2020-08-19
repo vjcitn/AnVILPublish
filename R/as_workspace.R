@@ -75,12 +75,12 @@
         .stop(response, namespace, name, "set dashboard failed")
 }
 
-#' @rdname package_as_workspace
+#' @rdname as_workspace
 #'
 #' @title Render R packages as AnVIL workspaces
 #'
-#' @description `package_source_as_workspace()` renders a package
-#'     source tree (e.g., from a git checkout) as an AnVIL workspace.
+#' @description `as_workspace()` renders a package source tree (e.g.,
+#'     from a git checkout) as an AnVIL workspace.
 #'
 #' @details Information from the DESCRIPTION file and Rmd YAML files
 #'     are used to populate the 'DASHBOARD' tab.
@@ -106,13 +106,13 @@
 #'     DASHBOARD and any similarly named notebooks) an existing
 #'     workspace?  One of `create` and `update` must be TRUE.
 #'
-#' @return `package_source_as_workspace()` returns the URL of the
-#'     updated workspace, invisibly.
+#' @return `as_workspace()` returns the URL of the updated workspace,
+#'     invisibly.
 #'
 #' @importFrom whisker whisker.render
 #'
 #' @export
-package_source_as_workspace <-
+as_workspace <-
     function(path, namespace, name = NULL, create = FALSE, update = FALSE)
 {
     stopifnot(
@@ -133,7 +133,7 @@ package_source_as_workspace <-
         stop("'create' a new workspace, or 'update' an existing one")
     }
 
-    bioconductor_user_access(namespace, name)
+    add_access(namespace, name)
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
@@ -149,7 +149,8 @@ package_source_as_workspace <-
     .set_dashboard(dashboard, namespace, name)
 
     ## build vignettes and add to workspace
-    vignettes_to_notebooks(path, namespace, name, create = FALSE, update = TRUE)
+    rmd_paths <- .vignette_paths(path)
+    as_notebook(rmd_paths, namespace, name, update = TRUE)
 
     wkspc <-
         paste0("https://anvil.terra.bio/#workspaces/", namespace, "/", name)

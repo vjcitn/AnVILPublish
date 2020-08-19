@@ -29,15 +29,15 @@
     bucket <- avbucket(namespace, name)
     notebooks <- paste0(bucket, "/notebooks/")
     gsutil_cp(ipynb, notebooks)
+    paste0(notebooks, basename(ipynb))
 }
 
-#' @rdname vignettes_to_notebooks
+#' @rdname as_notebook
 #'
 #' @title Render vignettes as .ipynb notebooks
 #'
-#' @description `vignettes_to_notebooks()` renders .Rmd vignettes as
-#'     .ipynb notebooks, and updates the notebooks in an AnVIL
-#'     workspace.
+#' @description `as_notebook()` renders .Rmd vignettes as .ipynb
+#'     notebooks, and updates the notebooks in an AnVIL workspace.
 #'
 #' @details `.Rmd` Vignettes are processed to `.md` using
 #'     `rmarkdown::render(..., md_document())`, and then translated to
@@ -47,47 +47,38 @@
 #'     The translation is not perfect, for instance code chunks marked
 #'     as `eval = FALSE` are not marked as such in the python notebook.
 #'
-#' @param path `character(1)` path to the location of the package
-#'     source code.
+#' @param rmd_paths `character()` paths to to Rmd files.
 #'
 #' @param namespace `character(1)` AnVIL namespace (billing project)
 #'     to be used.
 #'
-#' @param name `character(1)` AnVIL workspace name or NULL. If NULL,
-#'     the workspace name is set to
-#'     `"Bioconductor-Package-<pkgname>"`, where `<pkgname>` is the
-#'     name of the package (from the DESCRIPTION file) at `path`.
-#'
-#' @param create `logical(1)` Create a new project?
+#' @param name `character(1)` AnVIL workspace name.
 #'
 #' @param update `logical(1)` Update (over-write any similarly named
-#'     notebooks) an existing workspace?  One of `create` and `update`
-#'     must be TRUE.
+#'     notebooks) an existing workspace? The default (FALSE) creates
+#'     notebooks locally, e.g., for previewing via `jupyter notebook
+#'     *ipynb`.
+#'
+#' @return `as_notebook()` returns the paths to the local (if `update
+#'     = FALSE`) or the workspace notebooks.
 #'
 #' @export
-vignettes_to_notebooks <-
-    function(path, namespace, name = NULL, create = FALSE, update = FALSE)
+as_notebook <-
+    function(rmd_paths, namespace, name, update = FALSE)
 {
     stopifnot(
-        .is_scalar_character(path), dir.exists(path),
+        .is_character_n(rmd_paths), all(file.exists(rmd_paths)),
         .is_scalar_character(namespace),
-        .is_scalar_character(name) || is.null(name),
-        .is_scalar_logical(create),
+        .is_scalar_character(name),
         .is_scalar_logical(update)
     )
 
-    if (is.null(name))
-        name <- paste0("Bioconductor-Package-", .package_name_from_path(path))
-
-    ## create / update workspace
-    if (create) {
-        .create_workspace(namespace, name)
-    } else if (!update) {
-        stop("'create' a new workspace, or 'update' an existing one")
-    }
-
-    rmd <- .vignette_paths(path)
-    md <- .rmd_to_md(rmd)
+    md <- .rmd_to_md(rmd_paths)
     ipynb <- .md_to_ipynb(md)
-    .cp_ipynb_to_notebooks(ipynb, namespace, name)
+    if (update) {
+        .cp_ipynb_to_notebooks(ipynb, namespace, name)
+    } else {
+        message("use 'update = TRUE' to copy notebooks to the workspace")
+        ipynb
+    }
 }

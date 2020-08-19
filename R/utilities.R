@@ -29,6 +29,18 @@
     is.logical(x) && .is_scalar(x)
 }
 
+.is_vector_n <-
+    function(x)
+{
+    length(x) > 0 && !any(is.na(x))
+}
+
+.is_character_n <-
+    function(x)
+{
+    is.character(x) && .is_vector_n(x)
+}
+
 #' @importFrom httr status_code http_status content
 .stop <-
     function(response, namespace, name, text)

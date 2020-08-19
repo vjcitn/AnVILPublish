@@ -19,10 +19,6 @@ vignette: |
   %\VignetteEncoding{UTF-8}
 ---
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(eval = FALSE)
-```
-
 # Introduction
 
 This package produces AnVIL workspaces from R packages. An example
@@ -52,14 +48,14 @@ rather than attaching the package to the search path.
 It is necessary to have the [gcloud SDK][1] available to copy notebook
 files to the workspace. Test availability with
 
-```{r}
+```{r, eval = FALSE}
 AnVIL::gcloud_exists()
 ```
 
 and verify that the account and project are appropriate (consistent
 with AnVIL credentials) for use with AnVIL
 
-```{r}
+```{r, eval = FALSE}
 AnVIL::gcloud_account()
 AnVIL::gcloud_project()
 ```
@@ -73,7 +69,7 @@ Note that these be used to set, as well as interrogate, the acount and project.
 Conversion of .Rmd vignettes to .ipynb notebooks uses [notedown][2]
 python software. It must be available from within _R_, e.g.,
 
-```{r}
+```{r, eval = FALSE}
 system2("notedown", "--version")
 ```
 
@@ -84,10 +80,9 @@ system2("notedown", "--version")
 **CAUTION** updating an existing workspace will replace existing
 content in a way that cannot be undone -- you will lose content!
 
-Workspace creation or update uses information from the package
-DESCRIPTION file, and from the YAML metadata at the top of
-vignettes. It is therefore worth-while to make sure this information
-is accurate.
+Workspace creation or update uses information from the DESCRIPTION
+file, and from the YAML metadata at the top of vignettes. It is
+therefore worth-while to make sure this information is accurate.
 
 In the DESCRIPTION file, the Title, Version, Authors\@R (preferred) or
 Author / Maintainer fields, Description, and License fields are used.
@@ -98,13 +93,13 @@ abstract is a good candidate for future inclusion.
 ## From package source
 
 The one-stop route is to create a workspace from the package source
-(e.g., github checkout) directory use `package_source_as_workspace()`.
+(e.g., github checkout) directory use `as_workspace()`.
 
-```{r}
-AnVILPublish::package_source_as_workspace(
+```{r, eval = FALSE}
+AnVILPublish::as_workspace(
     "path/to/package",
     "bioconductor-rpci-anvil",     # i.e., billing account
-    create = TRUE
+    create = TRUE                  # use update = TRUE for an existing workspace
 )
 ```
 
@@ -116,14 +111,21 @@ not specify the `name =` argument, so creates or updates a workspace
 the package read from the DESCRIPTION file; provide an explict name to
 create or update an arbitrary workspace.
 
-Transforming vignettes to notebooks may require several iterations,
-and is available as a separate operation.
+`AnVILPublish::as_workspace()` invokes `as_notebook()` and
+`add_user()`, so these steps do not need to be performed 'by hand'.
 
-```{r}
-AnVIL::Publish::vignettes_to_notebooks(
+## Updating workspace notebooks from vignettes
+
+Transforming vignettes to notebooks may require several iterations,
+and is available as a separate operation. Use `update = FALSE` to
+create local copies for preview.
+
+```{r, eval = FALSE}
+AnVIL::Publish::as_notebook(
     "path/to/package",
     "bioconductor-rpci-anvil",     # i.e., billing account
-    update = TRUE
+    "Bioconductor-Package-Foo",    # Workspace name
+    update = FALSE                 # make notebooks, but do not update workspace
 )
 ```
 
@@ -145,10 +147,24 @@ approach migth use environment variables to set all cells to `eval =
 FALSE` during the rendering phase.
 
 It is likely that some of the limitations of vignette rendering can be
-reduded.
+reduced.
+
+## Adding user access credentiials to share the notebook
+
+The `"Bioconductor_User"` group can be added to the entities that can
+see the workspace. AnVIL users wishing to view the worksppace should
+be added to the `Bioconductor_User` group, rather than to the
+workspace directly. To add the user group, use
+
+```{r, eval = FALSE}
+AnVILPublish::add_user(
+    "bioconductor-rpci-anvil",
+    "Bioconductor-Package-Foo"
+)
+```
 
 # Session info {.unnumbered}
 
-```{r sessionInfo, echo=FALSE}
+```{r sessionInfo}
 sessionInfo()
 ```

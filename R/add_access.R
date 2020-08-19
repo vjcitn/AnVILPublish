@@ -18,11 +18,11 @@
         .stop(response, namespace, name, "update workspace permissions failed")
 }
 
-#' @rdname bioconductor_user_access
+#' @rdname add_access
 #'
 #' @title Add Bioconductor_User group to workspace access
 #'
-#' @description `bioconductor_user_access()` adds the
+#' @description `add_access()` adds the
 #'     `Bioconductor_User` group to a workspace with `READER`
 #'     permissions. Users gain access to the workspace (and others) by
 #'     being added to the Bioconductor_User group.
@@ -33,10 +33,10 @@
 #' @param name character(1) name of the workspace to add access
 #'     credentials.
 #'
-#' @return `bioconductor_user_access()` returns NULL, invisibly.
+#' @return `add_access()` returns NULL, invisibly.
 #'
 #' @export
-bioconductor_user_access <-
+add_access <-
     function(namespace, name)
 {
     stopifnot(

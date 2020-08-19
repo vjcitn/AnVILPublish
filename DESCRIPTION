@@ -1,6 +1,6 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 0.0.5
+Version: 0.0.6
 Authors@R: 
     person(
         given = "Martin",
@@ -27,7 +27,8 @@ Imports:
     stats,
 Suggests:
     knitr,
-    BiocStyle
+    BiocStyle,
+    BiocManager
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
