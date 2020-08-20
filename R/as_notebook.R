@@ -10,15 +10,30 @@
 .rmd_to_md <-
     function(rmd_paths)
 {
-    md <- vapply(rmd_paths, render, character(1), md_document())
+    knitr::opts_chunk$set(eval = FALSE)
+    vapply(rmd_paths, render, character(1), md_document(), envir = globalenv())
 }
 
 .md_to_ipynb <-
     function(md_paths)
 {
     ipynb_paths <- sub("\\.md", ".ipynb", md_paths)
-    for (i in seq_along(md_paths))
+    for (i in seq_along(md_paths)) {
         system2("notedown", c(md_paths[[i]], "-o", ipynb_paths[[i]]))
+        ## FIXME: more robust way to add / update top-level metadata
+        txt <- readLines(ipynb_paths[[i]])
+        idx <- tail(grep(' "metadata": {},', txt, fixed = TRUE), 1)
+        txt[idx] <- paste0(
+            ' "metadata": {',
+            '  "kernelspec": {',
+            '   "display_name": "R",',
+            '   "language": "R",',
+            '   "name": "ir"',
+            '  }',
+            '},'
+        )
+        writeLines(txt, ipynb_paths[[i]])
+    }
     ipynb_paths
 }
 

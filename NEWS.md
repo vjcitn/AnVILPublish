@@ -1,7 +1,21 @@
+# AnVILPublish 0.0.7
+
+- revise Rmd-to-ipynb work flow
+
+  - don't evaluate code chunks (avoids including output in notebook,
+    and side-effects because rmarkdown::render does not start a
+    separate process)
+  - insert metadata to use the R kernel. jupytext can do this more
+    elegantly, but does from .md renders code chunks and pre-formatted
+    rather than evaluation cells, and from .Rmd does not process
+    markdown well enough, e.g., not suppporting [foo][]-style links
+    when the definition is elsewhere in the document.
+
 # AnVILPublish 0.0.6
 
 - Added a `NEWS.md` file to track changes to the package.
 - Extensive interface renaming
-    - `as_workspace()` (formerly `package_source_as_workspace()`)
-    - `as_notebook()` (formerly `vignettes_to_notebooks()`)
-    - `add_access()` (formerly `bioconductor_user_access()`)
+
+  - `as_workspace()` (formerly `package_source_as_workspace()`)
+  - `as_notebook()` (formerly `vignettes_to_notebooks()`)
+  - `add_access()` (formerly `bioconductor_user_access()`)
