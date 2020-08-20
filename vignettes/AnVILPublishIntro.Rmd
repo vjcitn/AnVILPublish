@@ -8,8 +8,8 @@ package: AnVILPublish
 output:
   BiocStyle::html_document
 abstract: |
-  This vignette introduces the AnVILPublish package for transforming R / 
-  Bioconductor packages to AnVIL workspaces. Data from the package 
+  This vignette introduces the AnVILPublish package for transforming R /
+  Bioconductor packages to AnVIL workspaces. Data from the package
   DESCRIPTION file and vignette YAML chunks are used to create the 'DASHBOARD'
   workspace landing page. Vignettes are processed to Python notebooks and added
   to the workspace bucke for access via the 'NOTEBOOKS' tab.
@@ -114,6 +114,51 @@ create or update an arbitrary workspace.
 `AnVILPublish::as_workspace()` invokes `as_notebook()` and
 `add_user()`, so these steps do not need to be performed 'by hand'.
 
+## From collections of Rmd files
+
+Some _R_ resources, e.g., [bookdown][] sites, are not in
+packages. These can be processed to tow workspaces with minor
+modifications.
+
+1. Add a standard DESCRIPTION file (e.g.,
+   `use_this::use_description()`) to the directory containing the
+   `.Rmd` files.
+
+1. Use the `Package:` field to provide a one-word identifier (e.g.,
+   `Package: Bioc2020_CNV`) for your material. Add a key-value pair
+   `Type: Workshop` or similar. The `Pacakge:` and `Type:` fields will
+   will be used to create the workspace name as, in the example here,
+   `Bioconductor-Workshop-Bioc2020_CNV`.
+
+1. Add a 'yaml' chunk to the top of each .Rmd file, if not already
+   present, including the title and (optionally) name information,
+   e.g.,
+
+   ```
+   ---
+   title: "01. Introduction to the workshop"
+   author:
+   - name: Iman Author
+   - name: Imanother Author
+   ---
+   ```
+
+Publish the resources with
+
+```{r, eval = FALSE}
+AnVILPublish::as_workspace(
+    "path/to/directory",      # directory containing DESCRIPTION file
+    "bioconductor-rpci-anvil",
+    create = TRUE
+)
+```
+
+# Updating notebooks or workspace permissions
+
+These steps are performed automatically by `as_workspace()`, but may
+be useful when developing a new workspace or revising existing
+workspaces.
+
 ## Updating workspace notebooks from vignettes
 
 Transforming vignettes to notebooks may require several iterations,
@@ -122,7 +167,7 @@ create local copies for preview.
 
 ```{r, eval = FALSE}
 AnVIL::Publish::as_notebook(
-    "path/to/package",
+    "paths/to/files.Rmd",
     "bioconductor-rpci-anvil",     # i.e., billing account
     "Bioconductor-Package-Foo",    # Workspace name
     update = FALSE                 # make notebooks, but do not update workspace

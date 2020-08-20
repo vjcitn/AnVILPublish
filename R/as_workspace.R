@@ -10,17 +10,19 @@
         .stop(response, namespace, name, "create workspace failed")
 }
 
-.package_name_from_path <-
+.name_from_path <-
     function(path)
 {
     package <- basename(path)
     directory <- dirname(path)
     descr <- tryCatch({
-        packageDescription(package, directory)
+        packageDescription(package, directory, c("Package", "Type"))
     }, warning = function(w) {
-        stop("no package found at '", path, "'", call. = FALSE)
+        stop("no DESCRIPTION found at '", path, "'", call. = FALSE)
     })
-    descr$Package
+
+    type <- ifelse(is.na(descr$Type), "Package", descr$Type)
+    paste0(type, "-", descr$Package)
 }
 
 #' @importFrom utils packageDescription citation
@@ -45,8 +47,6 @@
     citn <- citation(package, directory)
     descr[["Citation"]] <- format(citn, "text")
 
-    descr[["ProcessDate"]] <- as.character(Sys.time())
-
     descr
 }
 
@@ -60,6 +60,9 @@
     ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
     for (i in seq_along(vignette_description[[1]]))
         vignette_description[[1]][[i]][["ipynb"]] <- ipynb[[i]]
+    titles <- vapply(vignette_description[[1]], `[[`, character(1), "title")
+    vignette_description[[1]] <- vignette_description[[1]][order(titles)]
+
     vignette_description
 }
 
@@ -124,7 +127,7 @@ as_workspace <-
     )
 
     if (is.null(name))
-        name <- paste0("Bioconductor-Package-", .package_name_from_path(path))
+        name <- paste0("Bioconductor-", .name_from_path(path))
 
     ## create / update workspace
     if (create) {
@@ -138,7 +141,12 @@ as_workspace <-
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
     vignette_description <- .rmd_vignette_description(path)
-    data <- c(description, vignette_description)
+    processing <- list(
+        ProcessDate = Sys.time(),
+        RVersion = paste0(R.version$major, ".", R.version$minor),
+        BioconductorVersion = BiocManager::version()
+    )
+    data <- c(description, vignette_description, processing)
     data$namespace <- namespace
     data$name <- name
 

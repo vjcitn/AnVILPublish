@@ -1,11 +1,17 @@
+# AnVILPublish 0.0.8
+
+- Support collections of Rmd files that are not packages, e.g.,
+  bookdown sites.
+- Add R / Bioconductor version to dashboard
+
 # AnVILPublish 0.0.7
 
-- revise Rmd-to-ipynb work flow
+- Revise Rmd-to-ipynb work flow
 
-  - don't evaluate code chunks (avoids including output in notebook,
+  - Don't evaluate code chunks (avoids including output in notebook,
     and side-effects because rmarkdown::render does not start a
     separate process)
-  - insert metadata to use the R kernel. jupytext can do this more
+  - Insert metadata to use the R kernel. jupytext can do this more
     elegantly, but does from .md renders code chunks and pre-formatted
     rather than evaluation cells, and from .Rmd does not process
     markdown well enough, e.g., not suppporting [foo][]-style links
