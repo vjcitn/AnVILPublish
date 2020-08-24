@@ -33,7 +33,7 @@
 #' @param name character(1) name of the workspace to add access
 #'     credentials.
 #'
-#' @return `add_access()` returns NULL, invisibly.
+#' @return `add_access()` returns TRUE, invisibly.
 #'
 #' @export
 add_access <-
@@ -44,4 +44,5 @@ add_access <-
         .is_scalar_character(name)
     )
     .update_workspace_acl(namespace, name)
+    return(invisible(TRUE))
 }

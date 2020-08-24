@@ -14,7 +14,7 @@ which the workspace belongs.}
 credentials.}
 }
 \value{
-\code{add_access()} returns NULL, invisibly.
+\code{add_access()} returns TRUE, invisibly.
 }
 \description{
 \code{add_access()} adds the

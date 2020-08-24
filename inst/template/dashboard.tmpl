@@ -18,10 +18,15 @@ Version: {{{ Version }}}
 
 {{{ Description }}}
 
+## Notebook setup
+
+- Use the '00-{{{ name }}}' notebook to configure your runtime for
+  this workspace.
+
 ## Vignettes
 
 {{ #Vignettes }}
-[{{{ title }}}](./#workspaces/{{{namespace}}}/{{{name}}}/notebooks/launch/{{{ ipynb }}})
+{{{ title }}} (file: {{{ ipynb }}})
 {{ #author }}
 - {{{ name }}}
 {{ /author }}

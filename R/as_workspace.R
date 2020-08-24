@@ -50,6 +50,32 @@
     descr
 }
 
+.package_depenencies <-
+    function(path)
+{
+    package <- basename(path)
+    directory <- dirname(path)
+    descr <- packageDescription(package, directory)
+
+    pkgs <- c(descr$Depends, descr$Imports, descr$Suggests, descr$LinkingTo)
+    if (is.null(pkgs)) {
+        descr[["NotebookPackages"]] <- character()
+        return(descr["NotebookPackages"])
+    }
+    pkgs <- unlist(strsplit(pkgs, "[[:space:]]*,[[:space:]]+"))
+
+    pattern <- "^R([[:space:]]*\\(.*\\))?$"
+    pkgs <- pkgs[grep(pattern, pkgs, invert = TRUE)]
+    pkgs <- sub(" .*", "", pkgs)
+
+    txt <- paste0('"', pkgs, '"', collapse=", ")
+    txt <- paste(strwrap(txt, indent = 4, exdent = 4), collapse="\n")
+    descr[["NotebookPackages"]] <- paste("\n", txt, "\n")
+
+    descr["NotebookPackages"]
+}
+
+
 #' @importFrom rmarkdown yaml_front_matter
 .rmd_vignette_description <-
     function(path)
@@ -76,6 +102,8 @@
     )
     if (status_code(response) >= 400L)
         .stop(response, namespace, name, "set dashboard failed")
+
+    return(invisible(TRUE))
 }
 
 #' @rdname as_workspace
@@ -105,9 +133,11 @@
 #'
 #' @param create `logical(1)` Create a new project?
 #'
-#' @param update `logical(1)` Update (over-write teh existing
+#' @param update `logical(1)` Update (over-write the existing
 #'     DASHBOARD and any similarly named notebooks) an existing
-#'     workspace?  One of `create` and `update` must be TRUE.
+#'     workspace?  If niether `create` nore `update` is TRUE, the code
+#'     to create a workspace is run but no output generated; this can
+#'     be useful during debugging.
 #'
 #' @return `as_workspace()` returns the URL of the updated workspace,
 #'     invisibly.
@@ -133,10 +163,10 @@ as_workspace <-
     if (create) {
         .create_workspace(namespace, name)
     } else if (!update) {
-        stop("'create' a new workspace, or 'update' an existing one")
+        message("use 'update = TRUE' to make changes to the workspace")
     }
 
-    add_access(namespace, name)
+    !update || add_access(namespace, name)
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
@@ -150,15 +180,27 @@ as_workspace <-
     data$namespace <- namespace
     data$name <- name
 
-    tmpl_path <-
-        system.file(package = "AnVILPublish", "template", "dashboard.tmpl")
-    tmpl <- readLines(tmpl_path)
+    tmpl <- .template("dashboard.tmpl")
     dashboard <- whisker.render(tmpl, data)
-    .set_dashboard(dashboard, namespace, name)
+    !update || .set_dashboard(dashboard, namespace, name)
+
+    ## create setup notebook
+    setup <- .package_depenencies(path)
+    data <- c(data, setup)
+    tmpl <- .template("setup-notebook.tmpl")
+    setup_notebook <- whisker.render(tmpl, data)
+    tmpdir <- tempfile()
+    dir.create(tmpdir)
+    rmd_setup_file <- paste0("00-", name, ".Rmd")
+    rmd_setup_path <- file.path(tmpdir, rmd_setup_file)
+    writeLines(setup_notebook, rmd_setup_path)
 
     ## build vignettes and add to workspace
-    rmd_paths <- .vignette_paths(path)
-    as_notebook(rmd_paths, namespace, name, update = TRUE)
+    rmd_paths <- c(.vignette_paths(path), rmd_setup_path)
+    !update || {
+        as_notebook(rmd_paths, namespace, name, update = update)
+        TRUE
+    }
 
     wkspc <-
         paste0("https://anvil.terra.bio/#workspaces/", namespace, "/", name)

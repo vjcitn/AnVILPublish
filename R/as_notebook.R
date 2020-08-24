@@ -25,6 +25,7 @@
     vapply(rmd_paths, render, character(1), md_document(), envir = globalenv())
 }
 
+#' @importFrom utils tail
 .md_to_ipynb <-
     function(md_paths)
 {

@@ -57,3 +57,10 @@
         call. = FALSE
     )
 }        
+
+.template <-
+    function(tmpl)
+{
+    tmpl_path <- system.file(package="AnVILPublish", "template", tmpl)
+    readLines(tmpl_path)
+}

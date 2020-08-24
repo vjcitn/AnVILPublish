@@ -1,0 +1,33 @@
+# Set up notebooks in '{{{ name }}}'
+
+This notebook installs R / Bioconductor packages on the current
+runtime so that other notebooks run without further package
+installation requirements.
+
+## Setup
+
+Make sure you have selected the 'R/Bioconductor' runtime from the icon
+on the top right of the Workspace, DASHBOARD, or NOTEBOOK page.
+
+Start the runtime if necessary by pressing the 'play' button.
+
+Evaluate the following cell to install necessary packages.
+
+```{r}
+if (!"AnVIL" %in% rownames(installed.packages()))
+   BiocManager::install("Bioconductor/AnVIL")
+pkgs <- as.character(c({{{ NotebookPackages }}}))
+pkgs <- pkgs[!pkgs %in% rownames(installed.packages())]
+AnVIL::install(pkgs)
+```
+
+This may take several minutes.
+
+## Vignettes
+
+{{ #Vignettes }}
+{{{ title }}} (file: {{{ ipynb }}})
+{{ #author }}
+- {{{ name }}}
+{{ /author }}
+{{ /Vignettes }}

@@ -20,9 +20,11 @@ name of the package (from the DESCRIPTION file) at \code{path}.}
 
 \item{create}{\code{logical(1)} Create a new project?}
 
-\item{update}{\code{logical(1)} Update (over-write teh existing
+\item{update}{\code{logical(1)} Update (over-write the existing
 DASHBOARD and any similarly named notebooks) an existing
-workspace?  One of \code{create} and \code{update} must be TRUE.}
+workspace?  If niether \code{create} nore \code{update} is TRUE, the code
+to create a workspace is run but no output generated; this can
+be useful during debugging.}
 }
 \value{
 \code{as_workspace()} returns the URL of the updated workspace,

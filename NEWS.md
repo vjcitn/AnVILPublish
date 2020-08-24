@@ -1,3 +1,12 @@
+# AnVILPublish 0.0.9
+
+- Create a notebook `'00-<<workspace name>>'` to install package /
+  book dependencies specified in the original source.
+- Don't link to vignettes from the DASHBOARD, since the namespace
+  changes in cloned workspaces.
+- `as_workspace(..., create = FALSE, update=FALSE)` now evaluates
+  code, silently.
+
 # AnVILPublish 0.0.8
 
 - Support collections of Rmd files that are not packages, e.g.,
