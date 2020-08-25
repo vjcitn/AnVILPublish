@@ -180,17 +180,6 @@ first to a markdown document using the `rmarkdown` command
 `render(..., md_document())`.  The markdown document is then
 translated to python notebook using `notedown`.
 
-Because the input to notedown is a plain markdown document, any
-annotations on the code chunks (e.g., `eval = FALSE`) have been lost
--- it will appear in the notebook that all code chunks are to be
-evaluated. This could be very problematic if the unevaluated code
-chunks were meant to illustrate destructive actions like file removal.
-
-Because the Rmd document has been evaluated, it includes output from
-the evaluated cells. This will likely be confusing to the user. One
-approach migth use environment variables to set all cells to `eval =
-FALSE` during the rendering phase.
-
 It is likely that some of the limitations of vignette rendering can be
 reduced.
 
@@ -207,6 +196,139 @@ AnVILPublish::add_user(
     "Bioconductor-Package-Foo"
 )
 ```
+
+# Vignette and .Rmd best practices
+
+## Orientation
+
+`.Rmd` files need to be converted to jupyter notebooks. Currently
+there is not an 'ideal' solution, with details listed in the
+'Additional notes...' section. Consequently, there are 'best
+practices' that lead to results that are more likely to be
+satisfactory, as outlined here.
+
+## Best practices
+
+1. For packages, make sure the DESCRIPTION file is complete. Use the
+   `Authors@R` notation for fully specifying authors. Add a `Date:`
+   field indicating date of last modification. Follow other
+   Bioconductor best practices, e.g., using and incrementing
+   appropriate version numbers.
+
+1. For collections of vignettes not in a package (e.g., a bookdown
+   folder), add a DESCRIPTION file at the top level. An example is
+
+    ```
+    Package: BCC2020
+    Type: Workshop
+    Title: R / Bioconductor in the AnVIL Cloud
+    Version: 1.0.0
+    Authors@R: 
+        c(person(
+            given = "Martin",
+            family = "Morgan",
+            role = c("aut", "cre"),
+            email = "Martin.Morgan@RoswellPark.org",
+            comment = c(ORCID = "0000-0002-5874-8148")
+        ),
+        person("Nitesh", "Turaga", role = "ctb"),
+        person("Lori", "Shepherd", role = "ctb"))
+    Description:
+        This book contains material for a 2 1/2 hour course offered at the
+        Bioinformatics Community Conference 2020. Bioconductor provides
+        more than 1900 R packages for the analysis and comprehension of
+        high-throughput genomic data. Most users install and run
+        Bioconductor on a personal computer or perhaps use an academic
+        cluster. Cloud-based solutions are increasing appealing, removing
+        the headaches of local installation while providing access to (a)
+        better, scalable computing resources; and (b) large-scale
+        'consortium' and other reference data sets. This session
+        introduces the AnVIL cloud computing environment. We cover use of
+        the cloud as a replacement to desktop-style computing; integrating
+        workflows for 'upstream' processing of large data resources with
+        interactive 'downstream' analysis and comprehension, using Human
+        Cell Atlas single-cell datasets as an example; and querying
+        cloud-based consortium data for integration with a users own data
+        sets.
+    License: CC-BY
+    Date: 2020-07-17
+    Encoding: UTF-8
+    LazyData: true
+    Roxygen: list(markdown = TRUE)
+    RoxygenNote: 7.1.1
+    ```
+    
+   The `Type` and `Package` fields are used to construct the second
+   and third elements of the workspace name (in this case,
+   `Bioconductor-Workshop-BCC2020`). `Title`, `Version`, `Authors@R`,
+   `Description`, `License`, and `Date` fields are used to construct
+   the DASHBOARD page.
+
+1. Start each vignette with 'yaml' containing essential metadata about
+   the document -- title and author(s). Include other information if
+   desired, e.g., abstract, (static) date of last modification.
+
+1. Use a file naming system AND a yaml `title` field that sorts files
+   into the order in which the document content is to be presented,
+   e.g., using file names `01-Setup.Rmd`, `02-...` and titles (in the
+   yaml) `title: "01 Setup"`, ... Naming both files and titles in this
+   way provides some chance that the Rmd files are presented, or can
+   be made to be presented, sensibly across the Bioconductor package
+   landing page and Workspace / NOTEBOOK interface.
+
+1. All code chunks, regardless of annotations such as `eval = FALSE`
+   or `echo = FALSE` are converted to visible, evaluated cells in
+   jupyter notebooks. Replace code chunks that you do not wish the
+   user to evaluate with HTML tags `<pre></pre>`.
+
+1. Although both Rmarkdown and python notebooks support code chunks in
+   multiple languages, there is no support for this in the conversion
+   procdess -- all cells are presented as _R_ code.
+
+## Additional notes on .Rmd conversion
+
+The current state of affairs with respect to notebook conversion is
+imperfect. Conversion is currently a two-step process: Rmarkdown to
+markdown, and markdown to ipynb.
+
+- The conversion from Rmarkdown to markdown is currently accomplished with
+
+    ```{r, eval = FALSE}
+    knitr::opts_chunk$set(eval=FALSE)
+    rmarkdown::render(..., md_document())
+    ```
+
+  to create a markdown
+  document from the `.Rmd` source.
+
+  This correctly processes the markdown content, including yaml
+  metadata, but renders all code chunks identically.
+
+  Using other knitr options may allow, e.g., conditional inclusion of
+  code chunks.
+
+- Use [`notedown`][] to convert from markdown to jupyter notebook, adding
+  metadata to indicate that the notebook has an _R_ kernel.
+
+Here are some notes on alternative solutions.
+
+- [`jupytext`][] (version 1.5.1) does not exclude yaml from
+  vignettes. It is under active development and may mature into a
+  possible alternative.
+
+- `pandoc` (version 2.10.1) provides a one-step convertion from `.Rmd`
+  to .`ipynb`, but code chunks are rendered as pre-formatted text
+  rather than evaluable cell.
+
+- [`notedown`][] (version 1.5.1) also provides one-step conversion, but
+  has difficulty with some markdown. For instance, reference-style
+  links `[foo][1]` are only rendered correctly when the reference
+  is in the same code chunk as the link. The project has not had
+  commits for several years, and has several open issues.
+
+[`notedown`]: https://github.com/aaren/notedown
+
+[`jupytext`]: https://github.com/mwouts/jupytext
 
 # Session info {.unnumbered}
 

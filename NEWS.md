@@ -1,3 +1,8 @@
+# AnVILPublish 0.0.10
+
+- Add 'best practices' and rationale for Rmarkdown-to-jupyter notebook
+  conversion.
+
 # AnVILPublish 0.0.9
 
 - Create a notebook `'00-<<workspace name>>'` to install package /
