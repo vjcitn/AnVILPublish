@@ -278,8 +278,10 @@ markdown, and markdown to ipynb.
 
 Here are some notes on alternative solutions.
 
--   [`jupytext`](https://github.com/mwouts/jupytext) (version 1.5.1)
-    does not exclude yaml from vignettes. It is under active development
+-   [`jupytext`](https://github.com/mwouts/jupytext) (version 1.5.1) but
+    has difficulty with some markdown. For instance, reference-style
+    links `[foo][1]` are only rendered correctly when the reference is
+    in the same code chunk as the link. It is under active development
     and may mature into a possible alternative.
 
 -   `pandoc` (version 2.10.1) provides a one-step convertion from `.Rmd`
@@ -287,11 +289,9 @@ Here are some notes on alternative solutions.
     rather than evaluable cell.
 
 -   [`notedown`](https://github.com/aaren/notedown) (version 1.5.1) also
-    provides one-step conversion, but has difficulty with some markdown.
-    For instance, reference-style links `[foo][1]` are only rendered
-    correctly when the reference is in the same code chunk as the link.
-    The project has not had commits for several years, and has several
-    open issues.
+    provides one-step conversion, but does not exclude yaml from
+    vignettes. The project has not had commits for several years, and
+    has several open issues.
 
 Session info
 ============
