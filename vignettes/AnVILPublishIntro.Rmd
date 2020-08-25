@@ -312,18 +312,18 @@ markdown, and markdown to ipynb.
 
 Here are some notes on alternative solutions.
 
-- [`jupytext`][] (version 1.5.1) does not exclude yaml from
-  vignettes. It is under active development and may mature into a
+- [`jupytext`][] (version 1.5.1) but has difficulty with some
+  markdown. For instance, reference-style links `[foo][1]` are only
+  rendered correctly when the reference is in the same code chunk as
+  the link. It is under active development and may mature into a
   possible alternative.
 
 - `pandoc` (version 2.10.1) provides a one-step convertion from `.Rmd`
   to .`ipynb`, but code chunks are rendered as pre-formatted text
   rather than evaluable cell.
 
-- [`notedown`][] (version 1.5.1) also provides one-step conversion, but
-  has difficulty with some markdown. For instance, reference-style
-  links `[foo][1]` are only rendered correctly when the reference
-  is in the same code chunk as the link. The project has not had
+- [`notedown`][] (version 1.5.1) also provides one-step conversion,
+  but does not exclude yaml from vignettes. The project has not had
   commits for several years, and has several open issues.
 
 [`notedown`]: https://github.com/aaren/notedown
