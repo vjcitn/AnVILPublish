@@ -166,7 +166,7 @@ as_workspace <-
         message("use 'update = TRUE' to make changes to the workspace")
     }
 
-    !update || add_access(namespace, name)
+    !(create || update) || add_access(namespace, name)
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
@@ -182,7 +182,7 @@ as_workspace <-
 
     tmpl <- .template("dashboard.tmpl")
     dashboard <- whisker.render(tmpl, data)
-    !update || .set_dashboard(dashboard, namespace, name)
+    !(create || update) || .set_dashboard(dashboard, namespace, name)
 
     ## create setup notebook
     setup <- .package_depenencies(path)
@@ -197,8 +197,8 @@ as_workspace <-
 
     ## build vignettes and add to workspace
     rmd_paths <- c(.vignette_paths(path), rmd_setup_path)
-    !update || {
-        as_notebook(rmd_paths, namespace, name, update = update)
+    !(create || update) || {
+        as_notebook(rmd_paths, namespace, name, update = update || create)
         TRUE
     }
 
