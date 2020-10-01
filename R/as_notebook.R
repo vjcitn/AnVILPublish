@@ -6,7 +6,8 @@
     if (!length(vignettes)) {
         ## workshops, books, etc can have Rmd in the root directory
         vignette_path <- path
-        vignettes <- dir(vignette_path, pattern = "\\.[Rr]md$", full.names = TRUE)
+        vignettes <-
+            dir(vignette_path, pattern = "\\.[Rr]md$", full.names = TRUE)
     }
     if (!length(vignettes))
         stop(

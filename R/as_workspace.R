@@ -86,7 +86,13 @@
     ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
     for (i in seq_along(vignette_description[[1]]))
         vignette_description[[1]][[i]][["ipynb"]] <- ipynb[[i]]
-    titles <- vapply(vignette_description[[1]], `[[`, character(1), "title")
+    titles <- vapply(vignette_description[[1]], function(x) {
+        if (!is.null(x$title)) {
+            x$title
+        } else {
+            NA_character_
+        }
+    }, character(1))
     vignette_description[[1]] <- vignette_description[[1]][order(titles)]
 
     vignette_description
