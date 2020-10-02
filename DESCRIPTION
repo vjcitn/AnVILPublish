@@ -1,12 +1,12 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 0.99.0
+Version: 0.99.1
 Authors@R: 
     person(
         given = "Martin",
         family = "Morgan",
         role = c("aut", "cre"),
-        email = "Martin.Morgan@RoswellPark.org",
+        email = "mtmorgan.bioc@gmail.com",
         comment = c(ORCID = "0000-0002-5874-8148")
     )
 Description:
