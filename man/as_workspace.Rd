@@ -36,8 +36,7 @@ from a git checkout) as an AnVIL workspace.
 }
 \details{
 Information from the DESCRIPTION file and Rmd YAML files
-are used to populate the 'DASHBOARD' tab.\preformatted{See `?vignettes_to_notebooks()` for details on how vignettes
-are processed to notebooks, and the limitations of the current
-approach.
+are used to populate the 'DASHBOARD' tab.\preformatted{See `?as_notebook()` for details on how vignettes are processed
+to notebooks, and the limitations of the current approach.
 }
 }

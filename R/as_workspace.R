@@ -122,9 +122,8 @@
 #' @details Information from the DESCRIPTION file and Rmd YAML files
 #'     are used to populate the 'DASHBOARD' tab.
 #'
-#'     See `?vignettes_to_notebooks()` for details on how vignettes
-#'     are processed to notebooks, and the limitations of the current
-#'     approach.
+#'     See `?as_notebook()` for details on how vignettes are processed
+#'     to notebooks, and the limitations of the current approach.
 #'
 #' @param path `character(1)` path to the location of the package
 #'     source code.
@@ -171,8 +170,6 @@ as_workspace <-
     } else if (!update) {
         message("use 'update = TRUE' to make changes to the workspace")
     }
-
-    !(create || update) || add_access(namespace, name)
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)

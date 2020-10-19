@@ -36,7 +36,7 @@ If necessary, install the AnVILPublish library
 
 ```{r}
 if (!"AnVILPublish" %in% rownames(installed.packages()))
-    BiocManager::install("Bioconductor/AnVILPublish")
+    BiocManager::install("AnVILPublish")
 ```
 
 There are only a small number of functions in the package; it is
@@ -108,16 +108,19 @@ update (and potentially overwrite) an existing workspace. One of
 `create` and `update` must be TRUE. The command illustrated above does
 not specify the `name =` argument, so creates or updates a workspace
 `"Bioconductor-Package-<pkgname>`, where `<pkgname>` is the name of
-the package read from the DESCRIPTION file; provide an explict name to
+the package read from the DESCRIPTION file; provide an explicit name to
 create or update an arbitrary workspace.
 
-`AnVILPublish::as_workspace()` invokes `as_notebook()` and
-`add_user()`, so these steps do not need to be performed 'by hand'.
+`AnVILPublish::as_workspace()` invokes `as_notebook()` so this step
+does not need to be performed 'by hand'.
+
+See the command `add_access()`, below, to make the workspace available
+to a wider audience.
 
 ## From collections of Rmd files
 
 Some _R_ resources, e.g., [bookdown][] sites, are not in
-packages. These can be processed to tow workspaces with minor
+packages. These can be processed to workspaces with minor
 modifications.
 
 1. Add a standard DESCRIPTION file (e.g.,
@@ -127,7 +130,7 @@ modifications.
 1. Use the `Package:` field to provide a one-word identifier (e.g.,
    `Package: Bioc2020_CNV`) for your material. Add a key-value pair
    `Type: Workshop` or similar. The `Pacakge:` and `Type:` fields will
-   will be used to create the workspace name as, in the example here,
+   be used to create the workspace name as, in the example here,
    `Bioconductor-Workshop-Bioc2020_CNV`.
 
 1. Add a 'yaml' chunk to the top of each .Rmd file, if not already
@@ -186,12 +189,12 @@ reduced.
 ## Adding user access credentiials to share the notebook
 
 The `"Bioconductor_User"` group can be added to the entities that can
-see the workspace. AnVIL users wishing to view the worksppace should
+see the workspace. AnVIL users wishing to view the workspace should
 be added to the `Bioconductor_User` group, rather than to the
 workspace directly. To add the user group, use
 
 ```{r, eval = FALSE}
-AnVILPublish::add_user(
+AnVILPublish::add_access(
     "bioconductor-rpci-anvil",
     "Bioconductor-Package-Foo"
 )
@@ -283,7 +286,7 @@ satisfactory, as outlined here.
 
 1. Although both Rmarkdown and python notebooks support code chunks in
    multiple languages, there is no support for this in the conversion
-   procdess -- all cells are presented as _R_ code.
+   process -- all cells are presented as _R_ code.
 
 ## Additional notes on .Rmd conversion
 
@@ -318,7 +321,7 @@ Here are some notes on alternative solutions.
   the link. It is under active development and may mature into a
   possible alternative.
 
-- `pandoc` (version 2.10.1) provides a one-step convertion from `.Rmd`
+- `pandoc` (version 2.10.1) provides a one-step conversion from `.Rmd`
   to .`ipynb`, but code chunks are rendered as pre-formatted text
   rather than evaluable cell.
 
