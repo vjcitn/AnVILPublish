@@ -108,8 +108,10 @@ update (and potentially overwrite) an existing workspace. One of
 `create` and `update` must be TRUE. The command illustrated above does
 not specify the `name =` argument, so creates or updates a workspace
 `"Bioconductor-Package-<pkgname>`, where `<pkgname>` is the name of
-the package read from the DESCRIPTION file; provide an explicit name to
-create or update an arbitrary workspace.
+the package read from the DESCRIPTION file; provide an explicit name
+to create or update an arbitrary workspace. The option `use_readme =
+TRUE` appends a README.md file to the formatted content of DESCRIPTION
+file.
 
 `AnVILPublish::as_workspace()` invokes `as_notebook()` so this step
 does not need to be performed 'by hand'.
