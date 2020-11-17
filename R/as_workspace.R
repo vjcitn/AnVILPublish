@@ -144,10 +144,10 @@
 #'     to create a workspace is run but no output generated; this can
 #'     be useful during debugging.
 #'
-#' @param append_readme logical(1) Defaults to `FALSE`; if `TRUE` the content
-#'     of README.md in package top-level folder is ingested and appended
-#'     to the package `DESCRIPTION` version and provenance metadata for rendering in
-#'     the workspace "DESCRIPTION".
+#' @param use_readme `logical(1)` Defaults to `FALSE`; if `TRUE` the
+#'     content of README.md in package top-level folder is used with
+#'     the package `DESCRIPTION` version and provenance metadata for
+#'     rendering in the workspace 'DASHBOARD'.
 #'
 #' @return `as_workspace()` returns the URL of the updated workspace,
 #'     invisibly.
@@ -157,14 +157,16 @@
 #' @export
 as_workspace <-
     function(path, namespace, name = NULL, create = FALSE, update = FALSE,
-      append_readme=FALSE)
+             use_readme = FALSE)
 {
     stopifnot(
         .is_scalar_character(path), dir.exists(path),
         .is_scalar_character(namespace),
         .is_scalar_character(name) || is.null(name),
         .is_scalar_logical(create),
-        .is_scalar_logical(update)
+        .is_scalar_logical(update),
+        .is_scalar_logical(use_readme),
+        !use_readme || file.exists(file.path(path, "README.md"))
     )
 
     if (is.null(name))
@@ -191,13 +193,12 @@ as_workspace <-
 
     tmpl <- .template("dashboard.tmpl")
     dashboard <- whisker.render(tmpl, data)
-    
-    if (append_readme) {
-      rmepath = paste(path, "/README.md", sep="")
-      stopifnot(file.exists(rmepath))
-      rme = paste(readLines(rmepath), collapse="\n")
-      dashboard = paste(dashboard, rme, collapse="\n")
-      }
+
+    if (use_readme) {
+        rmepath <- file.path(path, "README.md")
+        rme <- paste(readLines(rmepath), collapse="\n")
+        dashboard <- paste(dashboard, rme, collapse="\n")
+    }
 
     !(create || update) || .set_dashboard(dashboard, namespace, name)
 

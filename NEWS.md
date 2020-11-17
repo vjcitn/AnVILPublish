@@ -1,3 +1,9 @@
+# AnVILPublish 1.2.0
+
+## New Features
+
+- Include README.md on Workspace landing page (thanks Vince Carey).
+
 # AnVILPublish 0.0.10
 
 - Add 'best practices' and rationale for Rmarkdown-to-jupyter notebook
