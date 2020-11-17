@@ -4,7 +4,14 @@
 \alias{as_workspace}
 \title{Render R packages as AnVIL workspaces}
 \usage{
-as_workspace(path, namespace, name = NULL, create = FALSE, update = FALSE)
+as_workspace(
+  path,
+  namespace,
+  name = NULL,
+  create = FALSE,
+  update = FALSE,
+  append_readme = FALSE
+)
 }
 \arguments{
 \item{path}{\code{character(1)} path to the location of the package
@@ -25,6 +32,11 @@ DASHBOARD and any similarly named notebooks) an existing
 workspace?  If niether \code{create} nore \code{update} is TRUE, the code
 to create a workspace is run but no output generated; this can
 be useful during debugging.}
+
+\item{append_readme}{logical(1) Defaults to \code{FALSE}; if \code{TRUE} the content
+of README.md in package top-level folder is ingested and appended
+to the package \code{DESCRIPTION} version and provenance metadata for rendering in
+the workspace "DESCRIPTION".}
 }
 \value{
 \code{as_workspace()} returns the URL of the updated workspace,

@@ -144,6 +144,11 @@
 #'     to create a workspace is run but no output generated; this can
 #'     be useful during debugging.
 #'
+#' @param append_readme logical(1) Defaults to `FALSE`; if `TRUE` the content
+#'     of README.md in package top-level folder is ingested and appended
+#'     to the package `DESCRIPTION` version and provenance metadata for rendering in
+#'     the workspace "DESCRIPTION".
+#'
 #' @return `as_workspace()` returns the URL of the updated workspace,
 #'     invisibly.
 #'
@@ -151,7 +156,8 @@
 #'
 #' @export
 as_workspace <-
-    function(path, namespace, name = NULL, create = FALSE, update = FALSE)
+    function(path, namespace, name = NULL, create = FALSE, update = FALSE,
+      append_readme=FALSE)
 {
     stopifnot(
         .is_scalar_character(path), dir.exists(path),
@@ -185,6 +191,14 @@ as_workspace <-
 
     tmpl <- .template("dashboard.tmpl")
     dashboard <- whisker.render(tmpl, data)
+    
+    if (append_readme) {
+      rmepath = paste(path, "/README.md", sep="")
+      stopifnot(file.exists(rmepath))
+      rme = paste(readLines(rmepath), collapse="\n")
+      dashboard = paste(dashboard, rme, collapse="\n")
+      }
+
     !(create || update) || .set_dashboard(dashboard, namespace, name)
 
     ## create setup notebook
