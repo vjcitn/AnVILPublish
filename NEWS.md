@@ -4,6 +4,11 @@
 
 - Include README.md on Workspace landing page (thanks Vince Carey).
 
+## Bug Fixes
+
+- `as_workspace()` correctly passes an unboxed 'description' attribute
+  when setting the dashboard.
+
 # AnVILPublish 0.0.10
 
 - Add 'best practices' and rationale for Rmarkdown-to-jupyter notebook

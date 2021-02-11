@@ -4,7 +4,9 @@
     createWorkspace <- .get_terra()$createWorkspace
     response <- createWorkspace(
         namespace = namespace, name = name,
-        attributes = list(description = "New workspace")
+        attributes = list(
+            description = jsonlite::unbox("New workspace")
+        )
     )
     if (status_code(response) >= 400L)
         .stop(response, namespace, name, "create workspace failed")
@@ -104,7 +106,7 @@
     setAttributes <- .get_terra()$setAttributes
     response <- setAttributes(
         namespace, name,
-        list(description = dashboard)
+        list(description = jsonlite::unbox(dashboard))
     )
     if (status_code(response) >= 400L)
         .stop(response, namespace, name, "set dashboard failed")
