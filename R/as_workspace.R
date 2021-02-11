@@ -1,3 +1,4 @@
+#' @importFrom jsonlite unbox
 .create_workspace <-
     function(namespace, name)
 {
@@ -5,7 +6,7 @@
     response <- createWorkspace(
         namespace = namespace, name = name,
         attributes = list(
-            description = jsonlite::unbox("New workspace")
+            description = unbox("New workspace")
         )
     )
     if (status_code(response) >= 400L)
@@ -100,13 +101,14 @@
     vignette_description
 }
 
+#' @importFrom jsonlite unbox
 .set_dashboard <-
     function(dashboard, namespace, name)
 {
     setAttributes <- .get_terra()$setAttributes
     response <- setAttributes(
         namespace, name,
-        list(description = jsonlite::unbox(dashboard))
+        list(description = unbox(dashboard))
     )
     if (status_code(response) >= 400L)
         .stop(response, namespace, name, "set dashboard failed")

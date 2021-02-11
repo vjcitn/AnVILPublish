@@ -25,6 +25,7 @@ License: Artistic-2.0
 Imports:
     AnVIL,
     httr,
+    jsonlite,
     rmarkdown,
     whisker,
     tools,
