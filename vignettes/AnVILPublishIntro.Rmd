@@ -77,18 +77,30 @@ system2("notedown", "--version")
 
 # Creating or updating workspaces
 
-**CAUTION** updating an existing workspace will replace existing
-content in a way that cannot be undone -- you will lose content!
+**CAUTION** updating an existing workspace will replace existing content
+in a way that cannot be undone – you will lose content!
 
 Workspace creation or update uses information from the DESCRIPTION
-file, and from the YAML metadata at the top of vignettes. It is
-therefore worth-while to make sure this information is accurate.
+file, CSV files in inst/tables, and from the YAML metadata at the top
+of vignettes. It is therefore worth-while to make sure this
+information is accurate.
 
-In the DESCRIPTION file, the Title, Version, Authors\@R (preferred) or
-Author / Maintainer fields, Description, and License fields are used.
+In the DESCRIPTION file, the Title, Version, Date, Authors@R
+(preferred) or Author / Maintainer fields, Description, and License
+fields are used.
 
-In vignettes, the title: and author: name: fields are used; the
-abstract is a good candidate for future inclusion.
+Tables in inst/tables must be CSV files. Individual entries in the CSV
+file may contain 'whisker' expressions for variable substitution, as
+follows:
+
+- `{{ bucket }}`: the bucket location of the (possibly newly create)
+  workspace, as returned by `avbucket()`.
+  
+Tables are processed first with `whisker.render()` for variable
+substitution, and then `readr::read_csv()` and `avtable_import()`.
+
+In vignettes, the title: and author: name: fields are used. The abstract
+is a good candidate for future inclusion.
 
 ## From package source
 

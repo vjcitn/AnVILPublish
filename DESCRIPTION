@@ -1,6 +1,6 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 1.1.2
+Version: 1.1.3
 Authors@R: 
     c(person(
         given = "Martin",
@@ -27,6 +27,7 @@ Imports:
     httr,
     jsonlite,
     rmarkdown,
+    readr,
     whisker,
     tools,
     utils,

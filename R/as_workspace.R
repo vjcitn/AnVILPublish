@@ -116,6 +116,43 @@
     return(invisible(TRUE))
 }
 
+#' @importFrom AnVIL avbucket avtable_import
+#'
+#' @importFrom whisker whisker.render
+#'
+#' @importFrom readr read_csv
+.set_table <-
+    function(table_path, namespace, name)
+{
+    data <- list(
+        bucket = avbucket(namespace, name)
+    )
+
+    txt <- readLines(table_path)
+    fl <- tempfile()
+    writeLines(whisker.render(txt, data), fl)
+    tbl <- readr::read_csv(fl)
+    response <- avtable_import(tbl, namespace = namespace, name = name)
+    TRUE
+}
+
+.set_tables <-
+    function(path, namespace, name)
+{
+    tables_path <- file.path(path, "inst", "tables")
+    table_paths <- dir(tables_path, full = TRUE)
+
+    if (!length(table_paths))
+        ## early exit -- no tables for update
+        return(TRUE)
+
+    result <- vapply(
+        table_paths, .set_table, logical(1),
+        namespace, name
+    )
+    all(result)
+}
+
 #' @rdname as_workspace
 #'
 #' @title Render R packages as AnVIL workspaces
@@ -205,6 +242,8 @@ as_workspace <-
     }
 
     !(create || update) || .set_dashboard(dashboard, namespace, name)
+
+    !(create || update) || .set_tables(namespace, name)
 
     ## create setup notebook
     setup <- .package_depenencies(path)
