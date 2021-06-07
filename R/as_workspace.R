@@ -139,11 +139,10 @@
 .set_tables <-
     function(path, namespace, name)
 {
-    tables_path <- file.path(path, "inst", "tables")
-    table_paths <- dir(tables_path, full = TRUE)
+    table_path <- file.path(path, "inst", "tables")
+    table_paths <- dir(table_path, full.names = TRUE)
 
-    if (!length(table_paths))
-        ## early exit -- no tables for update
+    if (!length(table_paths)) # early exit -- no tables for update
         return(TRUE)
 
     result <- vapply(
@@ -243,7 +242,7 @@ as_workspace <-
 
     !(create || update) || .set_dashboard(dashboard, namespace, name)
 
-    !(create || update) || .set_tables(namespace, name)
+    !(create || update) || .set_tables(path, namespace, name)
 
     ## create setup notebook
     setup <- .package_depenencies(path)

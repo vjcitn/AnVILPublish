@@ -97,7 +97,7 @@ follows:
   workspace, as returned by `avbucket()`.
   
 Tables are processed first with `whisker.render()` for variable
-substitution, and then `readr::read_csv()` and `avtable_import()`.
+substitution, and then `readr::read_csv()` and `avtable_import()`.Q
 
 In vignettes, the title: and author: name: fields are used. The abstract
 is a good candidate for future inclusion.
