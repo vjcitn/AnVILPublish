@@ -85,18 +85,14 @@
 {
     rmd <- .vignette_paths(path)
     yaml <- lapply(rmd, yaml_front_matter)
+    titles <- .rmd_to_title(rmd)
+    yaml <- mapply(function(x, title, rmd) {
+        x$title <- unname(title)
+        x$ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
+        x$rmd <- rmd
+        x
+    }, yaml, titles, rmd)
     vignette_description <- list(Vignettes = yaml)
-    ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
-    for (i in seq_along(vignette_description[[1]]))
-        vignette_description[[1]][[i]][["ipynb"]] <- ipynb[[i]]
-    titles <- vapply(vignette_description[[1]], function(x) {
-        if (!is.null(x$title)) {
-            x$title
-        } else {
-            NA_character_
-        }
-    }, character(1))
-    vignette_description[[1]] <- vignette_description[[1]][order(titles)]
 
     vignette_description
 }

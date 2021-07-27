@@ -1,3 +1,4 @@
+#' @importFrom yaml read_yaml
 .vignette_paths <-
     function(path)
 {
@@ -15,7 +16,13 @@
             "\n  path: '", path, "'",
             call. = FALSE
         )
-    sort(vignettes)
+    bookdown_path <- file.path(path, "_bookdown.yml")
+    if (!is.null(bookdown_path)) {
+        bookdown_rmds <- read_yaml(bookdown_path)$rmd_files
+        vignettes[match(bookdown_rmds, basename(vignettes))]
+    } else {
+        sort(vignettes)
+    }
 }
 
 #' @importFrom rmarkdown render md_document
@@ -24,6 +31,30 @@
 {
     knitr::opts_chunk$set(eval = FALSE)
     vapply(rmd_paths, render, character(1), md_document(), envir = globalenv())
+}
+
+#' @importFrom rmarkdown yaml_front_matter
+.rmd_to_title <- 
+    function(rmd_paths)
+{
+    titles <- vapply(rmd_paths, function(rmd) {
+        if (!is.null(yaml_front_matter(rmd)$title)) {
+            yaml_front_matter(rmd)$title
+        } else {
+            lines = readLines(rmd)
+            rmd_headings <- lines[grepl("^#[[:blank:]]+", lines)]
+            if (grepl("^#[[:blank:]]\\(PART\\)+", rmd_headings[1])) {
+                headings <- rmd_headings[2]
+            } else {
+                headings <- rmd_headings[1]
+            }
+            if (length(headings)==0)
+                headings <- NA_character_
+                ## TODO: rmd file name without .rmd
+            headings
+        }
+    }, character(1))
+    sub("^#[[:blank:]]*", "", titles)
 }
 
 #' @importFrom utils tail
