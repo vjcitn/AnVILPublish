@@ -16,8 +16,10 @@
             "\n  path: '", path, "'",
             call. = FALSE
         )
+
+    ## use `_bookdown.yml` to order vignettes, if available
     bookdown_path <- file.path(path, "_bookdown.yml")
-    if (!is.null(bookdown_path)) {
+    if (file.exists(bookdown_path)) {
         bookdown_rmds <- read_yaml(bookdown_path)$rmd_files
         vignettes[match(bookdown_rmds, basename(vignettes))]
     } else {
@@ -33,28 +35,52 @@
     vapply(rmd_paths, render, character(1), md_document(), envir = globalenv())
 }
 
+## Extract vignette title from Rmd
 #' @importFrom rmarkdown yaml_front_matter
-.rmd_to_title <- 
+.notebook_title_from_yaml <-
+    function(rmd)
+{
+    ## retrieve title from yaml
+    front_matter <- yaml_front_matter(rmd)
+    names(front_matter) <- tolower(names(front_matter))
+    front_matter$title
+}
+
+#' @importFrom utils head
+.notebook_title_from_heading <-
+    function(rmd)
+{
+    ## ...or use the first level one heading as title
+    lines <- readLines(rmd)
+    rmd_headings <- lines[grepl("^#[[:blank:]]+", lines)]
+
+    ## ignore headings starting with '(PART)' (FIXME: is this just a convention?)
+    PART_lines <- grepl("^#[[:blank:]]+\\(PART\\)+", rmd_headings)
+    title <- head(rmd_headings[!PART_lines], 1L)
+
+    ## remove markdown tag
+    sub("^#[[:blank:]]*", "", title)
+}
+
+.notebook_title_from_path <-
+    function(rmd)
+{
+    title <- basename(rmd)
+    sub("\\.[Rr]md$", "", title)
+}
+
+.notebook_titles <-
     function(rmd_paths)
 {
     titles <- vapply(rmd_paths, function(rmd) {
-        if (!is.null(yaml_front_matter(rmd)$title)) {
-            yaml_front_matter(rmd)$title
-        } else {
-            lines = readLines(rmd)
-            rmd_headings <- lines[grepl("^#[[:blank:]]+", lines)]
-            if (grepl("^#[[:blank:]]\\(PART\\)+", rmd_headings[1])) {
-                headings <- rmd_headings[2]
-            } else {
-                headings <- rmd_headings[1]
-            }
-            if (length(headings)==0)
-                headings <- NA_character_
-                ## TODO: rmd file name without .rmd
-            headings
-        }
+        title <- .notebook_title_from_yaml(rmd)
+        if (length(title) == 0L)
+            title <- .notebook_title_from_heading(rmd)
+        if (length(title) == 0L)
+            title <- .notebook_title_from_path(rmd)
+
+        title
     }, character(1))
-    sub("^#[[:blank:]]*", "", titles)
 }
 
 #' @importFrom utils tail

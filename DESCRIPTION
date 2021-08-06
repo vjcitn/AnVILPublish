@@ -27,17 +27,20 @@ Imports:
     httr,
     jsonlite,
     rmarkdown,
+    yaml,
     readr,
     whisker,
     tools,
     utils,
-    stats,
+    stats
 Suggests:
     knitr,
     BiocStyle,
-    BiocManager
+    BiocManager,
+    testthat (>= 3.0.0)
 biocViews: Infrastructure, Software
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
+Config/testthat/edition: 3
