@@ -1,3 +1,9 @@
+# AnVILPublish 1.4.0
+
+## New Features
+
+- (v. 1.3.2) Support _bookdown.yml -- name and order vignettes
+
 # AnVILPublish 1.2.0
 
 ## New Features
