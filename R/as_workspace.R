@@ -86,7 +86,7 @@
     rmd <- .vignette_paths(path)
     yaml <- lapply(rmd, yaml_front_matter)
     titles <- .notebook_titles(rmd)
-    yaml <- mapply(function(x, title, rmd) {
+    yaml <- Map(function(x, title, rmd) {
         x$title <- unname(title)
         x$ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
         x$rmd <- rmd
