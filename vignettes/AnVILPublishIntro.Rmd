@@ -137,6 +137,8 @@ Some _R_ resources, e.g., [bookdown][] sites, are not in
 packages. These can be processed to workspaces with minor
 modifications.
 
+[bookdown]: https://bookdown.org/
+
 1. Add a standard DESCRIPTION file (e.g.,
    `use_this::use_description()`) to the directory containing the
    `.Rmd` files.
@@ -183,7 +185,7 @@ and is available as a separate operation. Use `update = FALSE` to
 create local copies for preview.
 
 ```{r, eval = FALSE}
-AnVIL::Publish::as_notebook(
+AnVILPublish::as_notebook(
     "paths/to/files.Rmd",
     "bioconductor-rpci-anvil",     # i.e., billing account
     "Bioconductor-Package-Foo",    # Workspace name
