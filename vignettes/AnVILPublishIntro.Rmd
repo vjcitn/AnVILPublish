@@ -202,7 +202,7 @@ translated to python notebook using `notedown`.
 It is likely that some of the limitations of vignette rendering can be
 reduced.
 
-## Adding user access credentiials to share the notebook
+## Adding user access credentials to share the notebook
 
 The `"Bioconductor_User"` group can be added to the entities that can
 see the workspace. AnVIL users wishing to view the workspace should
@@ -317,8 +317,10 @@ markdown, and markdown to ipynb.
     rmarkdown::render(..., md_document())
     ```
 
-  to create a markdown
-  document from the `.Rmd` source.
+  to create a markdown document from the `.Rmd` source.
+
+  Since code chunks are not evaluated, inline R code referencing
+  objects within these code chunks should not be used.
 
   This correctly processes the markdown content, including yaml
   metadata, but renders all code chunks identically.

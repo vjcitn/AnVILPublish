@@ -1,3 +1,9 @@
+# AnVILPublish 1.8.0
+
+## New Features
+
+- (v. 1.7.1) Support publication output '.Rmd'
+
 # AnVILPublish 1.4.0
 
 ## New Features

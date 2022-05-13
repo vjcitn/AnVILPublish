@@ -1,6 +1,6 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 1.7.0
+Version: 1.7.1
 Authors@R:
     c(person(
         given = "Martin",
@@ -13,6 +13,10 @@ Authors@R:
        family = "Carey",
        role = "ctb",
        comment = c(ORCID = "0000-0003-4046-0063")
+    ), person(
+       given = "Kayla",
+       family = "Interdonato",
+       role = "ctb"
     ))
 Description:
     Use this package to create or update AnVIL workspaces from
@@ -41,6 +45,6 @@ Suggests:
 biocViews: Infrastructure, Software
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 VignetteBuilder: knitr
 Config/testthat/edition: 3

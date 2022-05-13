@@ -108,13 +108,13 @@
 }
 
 #' @importFrom AnVIL avbucket gsutil_cp
-.cp_ipynb_to_notebooks <-
-    function(ipynb, namespace, name)
+.cp_to_cloud_notebooks <-
+    function(notebooks, namespace, name)
 {
     bucket <- avbucket(namespace, name)
-    notebooks <- paste0(bucket, "/notebooks/")
-    gsutil_cp(ipynb, notebooks)
-    paste0(notebooks, basename(ipynb))
+    bucket_notebooks <- paste0(bucket, "/notebooks/")
+    gsutil_cp(notebooks, bucket_notebooks)
+    paste0(bucket_notebooks, basename(notebooks))
 }
 
 #' @rdname as_notebook
@@ -144,13 +144,19 @@
 #'     notebooks locally, e.g., for previewing via `jupyter notebook
 #'     *ipynb`.
 #'
+#' @param type `character(1)` The type of notebook to be in the
+#'     workspace. Must be on of `ipynb`, `rmd`, or `both`.
+#'
 #' @return `as_notebook()` returns the paths to the local (if `update
 #'     = FALSE`) or the workspace notebooks.
 #'
 #' @export
 as_notebook <-
-    function(rmd_paths, namespace, name, update = FALSE)
+    function(
+        rmd_paths, namespace, name, update = FALSE,
+        type = c('ipynb', 'rmd', 'both'))
 {
+    type = match.arg(type)
     stopifnot(
         .is_character_n(rmd_paths), all(file.exists(rmd_paths)),
         .is_scalar_character(namespace),
@@ -158,12 +164,21 @@ as_notebook <-
         .is_scalar_logical(update)
     )
 
-    md <- .rmd_to_md(rmd_paths)
-    ipynb <- .md_to_ipynb(md)
+    if (type == 'ipynb') {
+        mds <- .rmd_to_md(rmd_paths)
+        notebooks <- .md_to_ipynb(mds)
+    } else if (type == 'rmd') {
+        notebooks <- rmd_paths
+    } else {
+        mds <- .rmd_to_md(rmd_paths)
+        notebooks <- .md_to_ipynb(mds)
+        notebooks <- c(notebooks, rmd_paths)
+    }
+
     if (update) {
-        .cp_ipynb_to_notebooks(ipynb, namespace, name)
+        .cp_to_cloud_notebooks(notebooks, namespace, name)
     } else {
         message("use 'update = TRUE' to copy notebooks to the workspace")
-        ipynb
+        notebooks
     }
 }

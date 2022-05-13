@@ -4,7 +4,13 @@
 \alias{as_notebook}
 \title{Render vignettes as .ipynb notebooks}
 \usage{
-as_notebook(rmd_paths, namespace, name, update = FALSE)
+as_notebook(
+  rmd_paths,
+  namespace,
+  name,
+  update = FALSE,
+  type = c("ipynb", "rmd", "both")
+)
 }
 \arguments{
 \item{rmd_paths}{\code{character()} paths to to Rmd files.}
@@ -17,6 +23,9 @@ to be used.}
 \item{update}{\code{logical(1)} Update (over-write any similarly named
 notebooks) an existing workspace? The default (FALSE) creates
 notebooks locally, e.g., for previewing via \verb{jupyter notebook *ipynb}.}
+
+\item{type}{\code{character(1)} The type of notebook to be in the
+workspace. Must be on of \code{ipynb}, \code{rmd}, or \code{both}.}
 }
 \value{
 \code{as_notebook()} returns the paths to the local (if \code{update = FALSE}) or the workspace notebooks.

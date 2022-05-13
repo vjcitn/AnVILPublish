@@ -10,7 +10,8 @@ as_workspace(
   name = NULL,
   create = FALSE,
   update = FALSE,
-  use_readme = FALSE
+  use_readme = FALSE,
+  type = c("ipynb", "rmd", "both")
 )
 }
 \arguments{
@@ -37,6 +38,9 @@ be useful during debugging.}
 content of README.md in package top-level folder is used with
 the package \code{DESCRIPTION} version and provenance metadata for
 rendering in the workspace 'DASHBOARD'.}
+
+\item{type}{\code{character(1)} The type of notebook to be in the
+workspace. Must be one of \code{ipynb}, \code{rmd}, or \code{both}.}
 }
 \value{
 \code{as_workspace()} returns the URL of the updated workspace,
