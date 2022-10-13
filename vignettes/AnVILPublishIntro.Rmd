@@ -64,10 +64,21 @@ Note that these be used to set, as well as interrogate, the acount and project.
 
 [1]: https://cloud.google.com/sdk
 
-## `notedown` software
+## `Quarto` software
 
-Conversion of .Rmd vignettes to .ipynb notebooks uses [notedown][2]
-python software. It must be available from within _R_, e.g.,
+Conversion of .Rmd vignettes to .ipynb notebooks uses Quarto software. It must
+be available from within _R_, e.g.,
+
+```{r, eval = FALSE}
+system2("quarto", "--version")
+```
+
+The user must determine if they want their notebooks converted or rendered into
+.ipynb notebooks. The difference is using `render` will automatically execute R
+code blocks while `convert` will not.
+ 
+The legacy softwar used is python [notedown][2], which also must be available
+from within _R_, e.g.,
 
 ```{r, eval = FALSE}
 system2("notedown", "--version")

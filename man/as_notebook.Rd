@@ -9,7 +9,8 @@ as_notebook(
   namespace,
   name,
   update = FALSE,
-  type = c("ipynb", "rmd", "both")
+  type = c("ipynb", "rmd", "both"),
+  quarto = c("render", "convert")
 )
 }
 \arguments{
@@ -26,6 +27,10 @@ notebooks locally, e.g., for previewing via \verb{jupyter notebook *ipynb}.}
 
 \item{type}{\code{character(1)} The type of notebook to be in the
 workspace. Must be on of \code{ipynb}, \code{rmd}, or \code{both}.}
+
+\item{quarto}{\code{character(1)} If the program Quarto is installed, this
+parameter indicates whether the .Rmd files will be rendered or converted.
+See vignette for more details.}
 }
 \value{
 \code{as_notebook()} returns the paths to the local (if \code{update = FALSE}) or the workspace notebooks.
@@ -38,7 +43,9 @@ notebooks, and updates the notebooks in an AnVIL workspace.
 \code{.Rmd} Vignettes are processed to \code{.md} using
 \code{rmarkdown::render(..., md_document())}, and then translated to
 \code{.ipynb} using python software called \code{notedown}; notedown is
-available at https://github.com/aaren/notedown.\preformatted{The translation is not perfect, for instance code chunks marked
+available at https://github.com/aaren/notedown.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{The translation is not perfect, for instance code chunks marked
 as `eval = FALSE` are not marked as such in the python notebook.
-}
+}\if{html}{\out{</div>}}
 }

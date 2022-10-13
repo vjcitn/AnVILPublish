@@ -188,6 +188,10 @@
 #' @param type `character(1)` The type of notebook to be in the
 #'     workspace. Must be one of `ipynb`, `rmd`, or `both`.
 #'
+#' @param quarto `character(1)` If the program Quarto is installed, this
+#'     parameter indicates whether the .Rmd files will be rendered or converted.
+#'     See vignette for more details.
+#'
 #' @return `as_workspace()` returns the URL of the updated workspace,
 #'     invisibly.
 #'
@@ -196,9 +200,11 @@
 #' @export
 as_workspace <-
     function(path, namespace, name = NULL, create = FALSE, update = FALSE,
-             use_readme = FALSE, type = c('ipynb', 'rmd', 'both'))
+             use_readme = FALSE, type = c('ipynb', 'rmd', 'both'), 
+             quarto = c('render', 'convert'))
 {
     type = match.arg(type)
+    quarto = mathc.arg(quarto)
     stopifnot(
         .is_scalar_character(path), dir.exists(path),
         .is_scalar_character(namespace),
@@ -259,7 +265,7 @@ as_workspace <-
     rmd_paths <- c(.vignette_paths(path), rmd_setup_path)
     !(create || update) || {
         as_notebook(
-            rmd_paths, namespace, name, update = update || create, type
+            rmd_paths, namespace, name, update = update || create, type, quarto
         )
         TRUE
     }

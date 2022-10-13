@@ -11,7 +11,8 @@ as_workspace(
   create = FALSE,
   update = FALSE,
   use_readme = FALSE,
-  type = c("ipynb", "rmd", "both")
+  type = c("ipynb", "rmd", "both"),
+  quarto = c("render", "convert")
 )
 }
 \arguments{
@@ -41,6 +42,10 @@ rendering in the workspace 'DASHBOARD'.}
 
 \item{type}{\code{character(1)} The type of notebook to be in the
 workspace. Must be one of \code{ipynb}, \code{rmd}, or \code{both}.}
+
+\item{quarto}{\code{character(1)} If the program Quarto is installed, this
+parameter indicates whether the .Rmd files will be rendered or converted.
+See vignette for more details.}
 }
 \value{
 \code{as_workspace()} returns the URL of the updated workspace,
@@ -52,7 +57,9 @@ from a git checkout) as an AnVIL workspace.
 }
 \details{
 Information from the DESCRIPTION file and Rmd YAML files
-are used to populate the 'DASHBOARD' tab.\preformatted{See `?as_notebook()` for details on how vignettes are processed
+are used to populate the 'DASHBOARD' tab.
+
+\if{html}{\out{<div class="sourceCode">}}\preformatted{See `?as_notebook()` for details on how vignettes are processed
 to notebooks, and the limitations of the current approach.
-}
+}\if{html}{\out{</div>}}
 }
