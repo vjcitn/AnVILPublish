@@ -4,6 +4,8 @@
 
 - (v. 1.7.1) Support publication output '.Rmd'
 
+- (v. 1.7.2) Support 'quarto' for Rmd to ipynb conversion
+
 # AnVILPublish 1.4.0
 
 ## New Features

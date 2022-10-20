@@ -66,24 +66,27 @@ Note that these be used to set, as well as interrogate, the acount and project.
 
 ## `Quarto` software
 
-Conversion of .Rmd vignettes to .ipynb notebooks uses Quarto software. It must
-be available from within _R_, e.g.,
+Conversion of .Rmd vignettes to .ipynb notebooks uses [Quarto][]
+software. It must be available from within _R_, e.g.,
 
 ```{r, eval = FALSE}
 system2("quarto", "--version")
 ```
 
-The user must determine if they want their notebooks converted or rendered into
-.ipynb notebooks. The difference is using `render` will automatically execute R
-code blocks while `convert` will not.
- 
-The legacy softwar used is python [notedown][2], which also must be available
-from within _R_, e.g.,
+The user must determine if they want their notebooks converted or
+rendered into .ipynb notebooks. The difference is that `render`
+automatically executes _R_ code blocks and embeds images, while
+`convert` will not.
+
+It is also possible to use Python [notedown][2], but support for this
+legacy tool will be discontinued; embeded images are not
+supported. [notedown][2] must be available from within _R_, e.g.,
 
 ```{r, eval = FALSE}
 system2("notedown", "--version")
 ```
 
+[Quarto]: https://quarto.org
 [2]: https://github.com/aaren/notedown
 
 # Creating or updating workspaces
@@ -231,11 +234,9 @@ AnVILPublish::add_access(
 
 ## Orientation
 
-`.Rmd` files need to be converted to jupyter notebooks. Currently
-there is not an 'ideal' solution, with details listed in the
-'Additional notes...' section. Consequently, there are 'best
-practices' that lead to results that are more likely to be
-satisfactory, as outlined here.
+`.Rmd` files need to be converted to jupyter notebooks. These 'best
+practices' lead to results that are more likely to be satisfactory, as
+outlined here.
 
 ## Best practices
 
@@ -317,9 +318,12 @@ satisfactory, as outlined here.
 
 ## Additional notes on .Rmd conversion
 
-The current state of affairs with respect to notebook conversion is
-imperfect. Conversion is currently a two-step process: Rmarkdown to
-markdown, and markdown to ipynb.
+Current best practice is to use [quarto][Quarto] for conversion of
+.Rmd to ipynb. Quarto is available on the Bioconductor docker image,
+or easily installed on Linux, macOS, or Windows.
+
+Legacy support is provied for notebook conversion using Python
+[notedown][2], with the following notes:
 
 - The conversion from Rmarkdown to markdown is currently accomplished with
 
@@ -339,28 +343,8 @@ markdown, and markdown to ipynb.
   Using other knitr options may allow, e.g., conditional inclusion of
   code chunks.
 
-- Use [`notedown`][] to convert from markdown to jupyter notebook, adding
+- Use [notedown][2] to convert from markdown to jupyter notebook, adding
   metadata to indicate that the notebook has an _R_ kernel.
-
-Here are some notes on alternative solutions.
-
-- [`jupytext`][] (version 1.5.1) but has difficulty with some
-  markdown. For instance, reference-style links `[foo][1]` are only
-  rendered correctly when the reference is in the same code chunk as
-  the link. It is under active development and may mature into a
-  possible alternative.
-
-- `pandoc` (version 2.10.1) provides a one-step conversion from `.Rmd`
-  to .`ipynb`, but code chunks are rendered as pre-formatted text
-  rather than evaluable cell.
-
-- [`notedown`][] (version 1.5.1) also provides one-step conversion,
-  but does not exclude yaml from vignettes. The project has not had
-  commits for several years, and has several open issues.
-
-[`notedown`]: https://github.com/aaren/notedown
-
-[`jupytext`]: https://github.com/mwouts/jupytext
 
 # Session info {.unnumbered}
 

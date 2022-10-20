@@ -121,12 +121,16 @@
     function(rmd_paths, quarto)
 {
     for(rmd_path in rmd_paths) {
-        system2("quarto", c(quarto, rmd_path, "--to", "ipynb"))
+        if (quarto == "render") {
+            system2("quarto", c("render", rmd_path, "--to", "ipynb"))
+        } else {
+            system2("quarto", c("convert", rmd_path))
+        }
     }
     notebooks <- sub("\\.Rmd", ".ipynb", rmd_paths)
 }
 
-.quarto_exists() <-
+.quarto_exists <-
     function()
 {
     quarto.location <- Sys.which("quarto")
@@ -194,7 +198,7 @@ as_notebook <-
             mds <- .rmd_to_md(rmd_paths)
             notebooks <- .md_to_ipynb(mds)
         }
-    } 
+    }
     if (type %in% c('rmd', 'both')) {
         notebooks <- c(notebooks, rmd_paths)
     }
