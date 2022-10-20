@@ -117,6 +117,26 @@
     paste0(bucket_notebooks, basename(notebooks))
 }
 
+.rmd_to_quarto <-
+    function(rmd_paths, quarto)
+{
+    for(rmd_path in rmd_paths) {
+        if (quarto == "render") {
+            system2("quarto", c("render", rmd_path, "--to", "ipynb"))
+        } else {
+            system2("quarto", c("convert", rmd_path))
+        }
+    }
+    notebooks <- sub("\\.Rmd", ".ipynb", rmd_paths)
+}
+
+.quarto_exists <-
+    function()
+{
+    quarto.location <- Sys.which("quarto")
+    nchar(quarto.location) > 0L
+}
+
 #' @rdname as_notebook
 #'
 #' @title Render vignettes as .ipynb notebooks
@@ -147,6 +167,10 @@
 #' @param type `character(1)` The type of notebook to be in the
 #'     workspace. Must be on of `ipynb`, `rmd`, or `both`.
 #'
+#' @param quarto `character(1)` If the program Quarto is installed, this
+#'     parameter indicates whether the .Rmd files will be rendered or converted.
+#'     See vignette for more details.
+#'
 #' @return `as_notebook()` returns the paths to the local (if `update
 #'     = FALSE`) or the workspace notebooks.
 #'
@@ -154,9 +178,11 @@
 as_notebook <-
     function(
         rmd_paths, namespace, name, update = FALSE,
-        type = c('ipynb', 'rmd', 'both'))
+        type = c('ipynb', 'rmd', 'both'),
+        quarto = c('render', 'convert'))
 {
     type = match.arg(type)
+    quarto = match.arg(quarto)
     stopifnot(
         .is_character_n(rmd_paths), all(file.exists(rmd_paths)),
         .is_scalar_character(namespace),
@@ -164,14 +190,16 @@ as_notebook <-
         .is_scalar_logical(update)
     )
 
-    if (type == 'ipynb') {
-        mds <- .rmd_to_md(rmd_paths)
-        notebooks <- .md_to_ipynb(mds)
-    } else if (type == 'rmd') {
-        notebooks <- rmd_paths
-    } else {
-        mds <- .rmd_to_md(rmd_paths)
-        notebooks <- .md_to_ipynb(mds)
+    notebooks <- character(0)
+    if (type %in% c('ipynb', 'both')) {
+        if (.quarto_exists()) {
+            notebooks <- .rmd_to_quarto(rmd_paths, quarto)
+        } else {
+            mds <- .rmd_to_md(rmd_paths)
+            notebooks <- .md_to_ipynb(mds)
+        }
+    }
+    if (type %in% c('rmd', 'both')) {
         notebooks <- c(notebooks, rmd_paths)
     }
 
