@@ -47,7 +47,15 @@
         strsplit(descr[["Author"]], "\n")[[1]],
         function(x) setNames(sub(",$", "", trimws(x)), "Author")
     )
-    citn <- citation(package, directory)
+    citn <- withCallingHandlers({
+        citation(package, directory)
+    }, warning = function(...) {
+        ## silence warnings, from no 'date' field?
+        invokeRestart("muffleWarning")
+    })
+    if (is.null(citn$year))
+        citn$year <- format(Sys.Date(), "%Y")
+
     descr[["Citation"]] <- format(citn, "text")
 
     descr
@@ -80,6 +88,19 @@
 
 
 #' @importFrom rmarkdown yaml_front_matter
+.rmd_vignette_authors <-
+    function(authors)
+{
+    if (is.character(authors)) {
+        ## author: Iman Author, etc
+        list(setNames(authors, "name"))
+    } else {
+        ## author:
+        ## -  name: ...
+        authors
+    }
+}
+
 .rmd_vignette_description <-
     function(path)
 {
@@ -90,6 +111,7 @@
         x$title <- unname(title)
         x$ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
         x$rmd <- rmd
+        x$vignette_authors <- .rmd_vignette_authors(x$author)
         x
     }, yaml, titles, rmd)
     vignette_description <- list(Vignettes = yaml)
@@ -188,8 +210,8 @@ as_workspace <-
              use_readme = FALSE, type = c('ipynb', 'rmd', 'both'),
              quarto = c('render', 'convert'))
 {
-    type = match.arg(type)
-    quarto = match.arg(quarto)
+    type <- match.arg(type)
+    quarto <- match.arg(quarto)
     stopifnot(
         .is_scalar_character(path), dir.exists(path),
         .is_scalar_character(namespace),
@@ -199,6 +221,7 @@ as_workspace <-
         .is_scalar_logical(use_readme),
         !use_readme || file.exists(file.path(path, "README.md"))
     )
+    path <- normalizePath(path)
 
     if (is.null(name))
         name <- paste0("Bioconductor-", .name_from_path(path))

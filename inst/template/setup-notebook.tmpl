@@ -13,12 +13,10 @@ Start the runtime if necessary by pressing the 'play' button.
 
 Evaluate the following cell to install necessary packages.
 
-```{r}
-if (!"AnVIL" %in% rownames(installed.packages()))
-   BiocManager::install("Bioconductor/AnVIL")
-pkgs <- as.character(c({{{ NotebookPackages }}}))
+```{r, eval = FALSE}
+pkgs <- c({{{NotebookPackages}}})
 pkgs <- pkgs[!pkgs %in% rownames(installed.packages())]
-AnVIL::install(pkgs)
+BiocManager::install(pkgs)
 ```
 
 This may take several minutes.
@@ -26,8 +24,7 @@ This may take several minutes.
 ## Vignettes
 
 {{ #Vignettes }}
-{{{ title }}} (file: [{{{ ipynb }}}](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/notebooks/launch/{{{ ipynb }}}))
-{{ #author }}
-- {{{ author }}}
-{{ /author }}
+{{{ title }}} (file: [{{{ ipynb }}}](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/analysis/launch/{{{ ipynb }}}))
+{{ #vignette_authors }}
+- {{{ name }}} {{#email}}(<a href="mailto:{{{email}}}">{{{email}}}</a>){{/email}} {{ /vignette_authors }}
 {{ /Vignettes }}

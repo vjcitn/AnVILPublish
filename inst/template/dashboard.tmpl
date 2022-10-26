@@ -1,5 +1,7 @@
 # {{{ Title }}}
 
+{{{ Description }}}
+
 Author:
 {{ #Authors }}
 - {{{ Author }}}{{ /Authors }}
@@ -14,10 +16,6 @@ Licence: {{{ License }}}
 
 Version: {{{ Version }}}
 
-## Description
-
-{{{ Description }}}
-
 ## Notebook setup
 
 - Use the '00-{{{ name }}}' notebook to configure your runtime for
@@ -26,10 +24,9 @@ Version: {{{ Version }}}
 ## Vignettes
 
 {{ #Vignettes }}
-{{{ title }}} (file: [{{{ ipynb }}}](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/notebooks/launch/{{{ ipynb }}}))
-{{ #author }}
-- {{{ author }}}
-{{ /author }}
+{{{ title }}} (file: [{{{ ipynb }}}](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/analysis/launch/{{{ ipynb }}}))
+{{ #vignette_authors }}
+- {{{ name }}} {{#email}}(<a href="mailto:{{{email}}}">{{{email}}}</a>){{/email}} {{ /vignette_authors }}
 {{ /Vignettes }}
 
 ## Citation
