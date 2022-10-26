@@ -2,13 +2,13 @@
 .vignette_paths <-
     function(path)
 {
+    regex <- "\\.[QqRr]md$"
     vignette_path <- file.path(path, "vignettes")
-    vignettes <- dir(vignette_path, pattern = "\\.[Rr]md$", full.names = TRUE)
+    vignettes <- dir(vignette_path, pattern = regex, full.names = TRUE)
     if (!length(vignettes)) {
         ## workshops, books, etc can have Rmd in the root directory
         vignette_path <- path
-        vignettes <-
-            dir(vignette_path, pattern = "\\.[Rr]md$", full.names = TRUE)
+        vignettes <- dir(vignette_path, pattern = regex, full.names = TRUE)
     }
     if (!length(vignettes))
         stop(
@@ -141,18 +141,16 @@
 #'
 #' @title Render vignettes as .ipynb notebooks
 #'
-#' @description `as_notebook()` renders .Rmd vignettes as .ipynb
-#'     notebooks, and updates the notebooks in an AnVIL workspace.
+#' @description `as_notebook()` renders Rmarkdown (`.Rmd`) or Quarto
+#'     (`.Qmd`) vignettes as Juptyer (`.ipynb`) notebooks. The
+#'     vignettes and notebooks are updated in an AnVIL workspace.
 #'
-#' @details `.Rmd` Vignettes are processed to `.md` using
-#'     `rmarkdown::render(..., md_document())`, and then translated to
-#'     `.ipynb` using python software called `notedown`; notedown is
-#'     available at https://github.com/aaren/notedown.
+#' @details See the vignette
+#'     "Publishing R / Bioconductor Packages To AnVIL Workspaces" for
+#'     details on the conversion process; best results are obtained
+#'     when Quarto software is available.
 #'
-#'     The translation is not perfect, for instance code chunks marked
-#'     as `eval = FALSE` are not marked as such in the python notebook.
-#'
-#' @param rmd_paths `character()` paths to to Rmd files.
+#' @param rmd_paths `character()` paths to Rmd or Qmd files.
 #'
 #' @param namespace `character(1)` AnVIL namespace (billing project)
 #'     to be used.
@@ -164,12 +162,14 @@
 #'     notebooks locally, e.g., for previewing via `jupyter notebook
 #'     *ipynb`.
 #'
-#' @param type `character(1)` The type of notebook to be in the
-#'     workspace. Must be on of `ipynb`, `rmd`, or `both`.
+#' @param type `character(1)` The type of notebook to be copied to the
+#'     workspace. Must be on of `ipynb`, `rmd`, or `both`. `ipynb`
+#'     copies only the Jupyter notebook. `rmd` copies Rmarkdown and
+#'     Quarto vignettes. `both` copies both notebooks and vignettes.
 #'
-#' @param quarto `character(1)` If the program Quarto is installed, this
-#'     parameter indicates whether the .Rmd files will be rendered or converted.
-#'     See vignette for more details.
+#' @param quarto `character(1)` If the program Quarto is installed,
+#'     this parameter indicates whether the .Rmd files will be
+#'     rendered or converted.  See vignette for more details.
 #'
 #' @return `as_notebook()` returns the paths to the local (if `update
 #'     = FALSE`) or the workspace notebooks.

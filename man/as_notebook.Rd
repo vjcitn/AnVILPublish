@@ -14,7 +14,7 @@ as_notebook(
 )
 }
 \arguments{
-\item{rmd_paths}{\code{character()} paths to to Rmd files.}
+\item{rmd_paths}{\code{character()} paths to Rmd or Qmd files.}
 
 \item{namespace}{\code{character(1)} AnVIL namespace (billing project)
 to be used.}
@@ -25,27 +25,26 @@ to be used.}
 notebooks) an existing workspace? The default (FALSE) creates
 notebooks locally, e.g., for previewing via \verb{jupyter notebook *ipynb}.}
 
-\item{type}{\code{character(1)} The type of notebook to be in the
-workspace. Must be on of \code{ipynb}, \code{rmd}, or \code{both}.}
+\item{type}{\code{character(1)} The type of notebook to be copied to the
+workspace. Must be on of \code{ipynb}, \code{rmd}, or \code{both}. \code{ipynb}
+copies only the Jupyter notebook. \code{rmd} copies Rmarkdown and
+Quarto vignettes. \code{both} copies both notebooks and vignettes.}
 
-\item{quarto}{\code{character(1)} If the program Quarto is installed, this
-parameter indicates whether the .Rmd files will be rendered or converted.
-See vignette for more details.}
+\item{quarto}{\code{character(1)} If the program Quarto is installed,
+this parameter indicates whether the .Rmd files will be
+rendered or converted.  See vignette for more details.}
 }
 \value{
 \code{as_notebook()} returns the paths to the local (if \code{update = FALSE}) or the workspace notebooks.
 }
 \description{
-\code{as_notebook()} renders .Rmd vignettes as .ipynb
-notebooks, and updates the notebooks in an AnVIL workspace.
+\code{as_notebook()} renders Rmarkdown (\code{.Rmd}) or Quarto
+(\code{.Qmd}) vignettes as Juptyer (\code{.ipynb}) notebooks. The
+vignettes and notebooks are updated in an AnVIL workspace.
 }
 \details{
-\code{.Rmd} Vignettes are processed to \code{.md} using
-\code{rmarkdown::render(..., md_document())}, and then translated to
-\code{.ipynb} using python software called \code{notedown}; notedown is
-available at https://github.com/aaren/notedown.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{The translation is not perfect, for instance code chunks marked
-as `eval = FALSE` are not marked as such in the python notebook.
-}\if{html}{\out{</div>}}
+See the vignette
+"Publishing R / Bioconductor Packages To AnVIL Workspaces" for
+details on the conversion process; best results are obtained
+when Quarto software is available.
 }

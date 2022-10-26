@@ -22,10 +22,7 @@ source code.}
 \item{namespace}{\code{character(1)} AnVIL namespace (billing project)
 to be used.}
 
-\item{name}{\code{character(1)} AnVIL workspace name or NULL. If NULL,
-the workspace name is set to
-\code{"Bioconductor-Package-<pkgname>"}, where \verb{<pkgname>} is the
-name of the package (from the DESCRIPTION file) at \code{path}.}
+\item{name}{\code{character(1)} AnVIL workspace name.}
 
 \item{create}{\code{logical(1)} Create a new project?}
 
@@ -40,12 +37,14 @@ content of README.md in package top-level folder is used with
 the package \code{DESCRIPTION} version and provenance metadata for
 rendering in the workspace 'DASHBOARD'.}
 
-\item{type}{\code{character(1)} The type of notebook to be in the
-workspace. Must be one of \code{ipynb}, \code{rmd}, or \code{both}.}
+\item{type}{\code{character(1)} The type of notebook to be copied to the
+workspace. Must be on of \code{ipynb}, \code{rmd}, or \code{both}. \code{ipynb}
+copies only the Jupyter notebook. \code{rmd} copies Rmarkdown and
+Quarto vignettes. \code{both} copies both notebooks and vignettes.}
 
-\item{quarto}{\code{character(1)} If the program Quarto is installed, this
-parameter indicates whether the .Rmd files will be rendered or converted.
-See vignette for more details.}
+\item{quarto}{\code{character(1)} If the program Quarto is installed,
+this parameter indicates whether the .Rmd files will be
+rendered or converted.  See vignette for more details.}
 }
 \value{
 \code{as_workspace()} returns the URL of the updated workspace,
@@ -56,10 +55,7 @@ invisibly.
 from a git checkout) as an AnVIL workspace.
 }
 \details{
-Information from the DESCRIPTION file and Rmd YAML files
-are used to populate the 'DASHBOARD' tab.
-
-\if{html}{\out{<div class="sourceCode">}}\preformatted{See `?as_notebook()` for details on how vignettes are processed
-to notebooks, and the limitations of the current approach.
-}\if{html}{\out{</div>}}
+Information from the DESCRIPTION file and Rmd YAML are
+used to populate the 'DASHBOARD' tab.  See \code{?as_notebook()} for
+details on how vignettes are processed to notebooks.
 }
