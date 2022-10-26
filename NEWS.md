@@ -8,6 +8,18 @@
 
 - (v. 1.7.3) Support 'Qmd' files.
 
+## User Visible Changes
+
+- (v. 1.7.4) Update workspace publication -- put 'Description'
+  directly under title so it appears in WORKSPACE summary; add current
+  'Date' to citation if not already defined.
+
+## Bug Fixes
+
+- (v. 1.7.4) Workspace dashboard and startup link to notebooks in
+  'analysis' rather than 'notebook' location; clean up vignette author
+  list.
+
 # AnVILPublish 1.4.0
 
 ## New Features
