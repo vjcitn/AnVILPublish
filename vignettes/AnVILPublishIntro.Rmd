@@ -66,15 +66,16 @@ Note that these be used to set, as well as interrogate, the acount and project.
 
 ## `Quarto` software
 
-Conversion of .Rmd vignettes to .ipynb notebooks uses [Quarto][]
-software. It must be available from within _R_, e.g.,
+Conversion of Rmarkdown (`.Rmd`) or Quarto (`.Qmd`) vignettes to
+Jupyter (`.ipynb) notebooks uses [Quarto][] software. It must be
+available from within _R_, e.g.,
 
 ```{r, eval = FALSE}
 system2("quarto", "--version")
 ```
 
-The user must determine if they want their notebooks converted or
-rendered into .ipynb notebooks. The difference is that `render`
+The user must determine if they want their vignettes converted or
+rendered into Jupyter notebooks. The difference is that `render`
 automatically executes _R_ code blocks and embeds images, while
 `convert` will not.
 
@@ -119,7 +120,7 @@ is a good candidate for future inclusion.
 ## From package source
 
 The one-stop route is to create a workspace from the package source
-(e.g., github checkout) directory use `as_workspace()`.
+(e.g., github checkout) directory using `as_workspace()`.
 
 ```{r, eval = FALSE}
 AnVILPublish::as_workspace(

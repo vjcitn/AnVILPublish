@@ -155,22 +155,14 @@
 #' @description `as_workspace()` renders a package source tree (e.g.,
 #'     from a git checkout) as an AnVIL workspace.
 #'
-#' @details Information from the DESCRIPTION file and Rmd YAML files
-#'     are used to populate the 'DASHBOARD' tab.
+#' @details Information from the DESCRIPTION file and Rmd YAML are
+#'     used to populate the 'DASHBOARD' tab.  See `?as_notebook()` for
+#'     details on how vignettes are processed to notebooks.
 #'
-#'     See `?as_notebook()` for details on how vignettes are processed
-#'     to notebooks, and the limitations of the current approach.
+#' @inheritParams as_notebook
 #'
 #' @param path `character(1)` path to the location of the package
 #'     source code.
-#'
-#' @param namespace `character(1)` AnVIL namespace (billing project)
-#'     to be used.
-#'
-#' @param name `character(1)` AnVIL workspace name or NULL. If NULL,
-#'     the workspace name is set to
-#'     `"Bioconductor-Package-<pkgname>"`, where `<pkgname>` is the
-#'     name of the package (from the DESCRIPTION file) at `path`.
 #'
 #' @param create `logical(1)` Create a new project?
 #'
@@ -184,13 +176,6 @@
 #'     content of README.md in package top-level folder is used with
 #'     the package `DESCRIPTION` version and provenance metadata for
 #'     rendering in the workspace 'DASHBOARD'.
-#'
-#' @param type `character(1)` The type of notebook to be in the
-#'     workspace. Must be one of `ipynb`, `rmd`, or `both`.
-#'
-#' @param quarto `character(1)` If the program Quarto is installed, this
-#'     parameter indicates whether the .Rmd files will be rendered or converted.
-#'     See vignette for more details.
 #'
 #' @return `as_workspace()` returns the URL of the updated workspace,
 #'     invisibly.
