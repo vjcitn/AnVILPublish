@@ -102,15 +102,17 @@
 }
 
 .rmd_vignette_description <-
-    function(path)
+    function(path, type)
 {
     rmd <- .vignette_paths(path)
     yaml <- lapply(rmd, yaml_front_matter)
     titles <- .notebook_titles(rmd)
     yaml <- Map(function(x, title, rmd) {
         x$title <- unname(title)
-        x$ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
-        x$rmd <- rmd
+        if (type %in% c("ipynb", "both"))
+            x$ipynb <- sub("\\.[Rr]md", ".ipynb", basename(rmd))
+        if (type %in% c("rmd", "both"))
+            x$rmd <- basename(rmd)
         x$vignette_authors <- .rmd_vignette_authors(x$author)
         x
     }, yaml, titles, rmd)
@@ -235,7 +237,7 @@ as_workspace <-
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
-    vignette_description <- .rmd_vignette_description(path)
+    vignette_description <- .rmd_vignette_description(path, type)
     processing <- list(
         ProcessDate = Sys.time(),
         RVersion = paste0(R.version$major, ".", R.version$minor),

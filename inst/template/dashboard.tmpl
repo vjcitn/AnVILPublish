@@ -24,7 +24,8 @@ Version: {{{ Version }}}
 ## Vignettes
 
 {{ #Vignettes }}
-{{{ title }}} (file: [{{{ ipynb }}}](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/analysis/launch/{{{ ipynb }}}))
+{{#ipynb}}[ipynb](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/analysis/launch/{{{ ipynb }}}) {{/ipynb}}{{!
+}}{{#rmd}}[Rmd](https://anvil.terra.bio/#workspaces/{{{ namespace }}}/{{{ name }}}/analysis/launch/{{{ rmd }}}){{/rmd}} -- {{{ title }}}
 {{ #vignette_authors }}
 - {{{ name }}} {{#email}}(<a href="mailto:{{{email}}}">{{{email}}}</a>){{/email}} {{ /vignette_authors }}
 {{ /Vignettes }}
