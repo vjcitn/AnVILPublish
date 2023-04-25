@@ -1,6 +1,6 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 1.10.0
+Version: 1.11.0
 Authors@R:
     c(person(
         given = "Martin",
