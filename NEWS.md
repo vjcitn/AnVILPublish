@@ -1,3 +1,7 @@
+# AnVILPublis 1.10.0
+
+- (v. 1.11.1) Remove support for `notedown` Python module conversion.
+
 # AnVILPublish 1.8.0
 
 ## New Features

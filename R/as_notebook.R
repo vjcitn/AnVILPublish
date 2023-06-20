@@ -87,6 +87,11 @@
 .md_to_ipynb <-
     function(md_paths)
 {
+    stop(
+        "conversion using 'notedown' is no longer supported; ",
+        "ensure `Sys.which('quarto')` finds an installation of 'quarto' ",
+        "software from Posit"
+    )
     ipynb_paths <- sub("\\.md", ".ipynb", md_paths)
     for (i in seq_along(md_paths)) {
         system2("notedown", c(md_paths[[i]], "-o", ipynb_paths[[i]]))

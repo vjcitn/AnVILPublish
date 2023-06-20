@@ -79,16 +79,9 @@ rendered into Jupyter notebooks. The difference is that `render`
 automatically executes _R_ code blocks and embeds images, while
 `convert` will not.
 
-It is also possible to use Python [notedown][2], but support for this
-legacy tool will be discontinued; embeded images are not
-supported. [notedown][2] must be available from within _R_, e.g.,
-
-```{r, eval = FALSE}
-system2("notedown", "--version")
-```
+Use of Python _notedown_ for conversion is no longer supported.
 
 [Quarto]: https://quarto.org
-[2]: https://github.com/aaren/notedown
 
 # Creating or updating workspaces
 
@@ -212,7 +205,7 @@ The vignette transformation process has several limitations. Only
 `.Rmd` vignettes are supported. Currently, the vignette is transformed
 first to a markdown document using the `rmarkdown` command
 `render(..., md_document())`.  The markdown document is then
-translated to python notebook using `notedown`.
+translated to Python notebook using `quarto`.
 
 It is likely that some of the limitations of vignette rendering can be
 reduced.
@@ -323,29 +316,8 @@ Current best practice is to use [quarto][Quarto] for conversion of
 .Rmd to ipynb. Quarto is available on the Bioconductor docker image,
 or easily installed on Linux, macOS, or Windows.
 
-Legacy support is provied for notebook conversion using Python
-[notedown][2], with the following notes:
-
-- The conversion from Rmarkdown to markdown is currently accomplished with
-
-    ```{r, eval = FALSE}
-    knitr::opts_chunk$set(eval=FALSE)
-    rmarkdown::render(..., md_document())
-    ```
-
-  to create a markdown document from the `.Rmd` source.
-
-  Since code chunks are not evaluated, inline R code referencing
-  objects within these code chunks should not be used.
-
-  This correctly processes the markdown content, including yaml
-  metadata, but renders all code chunks identically.
-
-  Using other knitr options may allow, e.g., conditional inclusion of
-  code chunks.
-
-- Use [notedown][2] to convert from markdown to jupyter notebook, adding
-  metadata to indicate that the notebook has an _R_ kernel.
+Support for conversion using the Python _notedown_ module is no longer
+supported.
 
 # Session info {.unnumbered}
 
