@@ -48,7 +48,7 @@ project.
 ## `Quarto` software
 
 Conversion of Rmarkdown (`.Rmd`) or Quarto (`.Qmd`) vignettes to Jupyter
-(\`.ipynb) notebooks uses [Quarto](https://quarto.org) software. It must
+(`.ipynb`) notebooks uses [Quarto](https://quarto.org) software. It must
 be available from within *R*, e.g.,
 
 ``` r

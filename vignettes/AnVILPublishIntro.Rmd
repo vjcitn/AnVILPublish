@@ -67,7 +67,7 @@ Note that these be used to set, as well as interrogate, the acount and project.
 ## `Quarto` software
 
 Conversion of Rmarkdown (`.Rmd`) or Quarto (`.Qmd`) vignettes to
-Jupyter (`.ipynb) notebooks uses [Quarto][] software. It must be
+Jupyter (`.ipynb`) notebooks uses [Quarto][] software. It must be
 available from within _R_, e.g.,
 
 ```{r, eval = FALSE}
