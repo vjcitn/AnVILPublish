@@ -1,5 +1,8 @@
-Introduction
-============
+Publishing R / Bioconductor Packages To AnVIL Workspaces
+================
+true
+
+# Introduction
 
 This package produces AnVIL workspaces from R packages. An example uses
 the new [Gen3](https://github.com/Bioconductor/Gen3) package as a basis
@@ -8,89 +11,117 @@ for the
 workspace (permission to access this workspace is required, but there
 are no restrictions on granting permission).
 
-Package installation
---------------------
+## Package installation
 
 If necessary, install the AnVILPublish library
 
-    if (!"AnVILPublish" %in% rownames(installed.packages()))
-        BiocManager::install("Bioconductor/AnVILPublish")
+``` r
+if (!"AnVILPublish" %in% rownames(installed.packages()))
+    BiocManager::install("AnVILPublish")
+```
 
 There are only a small number of functions in the package; it is likely
 best practice to invoke these using `AnVILPublish::...()` rather than
 attaching the package to the search path.
 
-The `gcloud` SDK
-----------------
+## The `gcloud` SDK
 
 It is necessary to have the [gcloud SDK](https://cloud.google.com/sdk)
 available to copy notebook files to the workspace. Test availability
 with
 
-    AnVIL::gcloud_exists()
+``` r
+AnVIL::gcloud_exists()
+```
 
 and verify that the account and project are appropriate (consistent with
 AnVIL credentials) for use with AnVIL
 
-    AnVIL::gcloud_account()
-    AnVIL::gcloud_project()
+``` r
+AnVIL::gcloud_account()
+AnVIL::gcloud_project()
+```
 
 Note that these be used to set, as well as interrogate, the acount and
 project.
 
-`notedown` software
--------------------
+## `Quarto` software
 
-Conversion of .Rmd vignettes to .ipynb notebooks uses
-[notedown](https://github.com/aaren/notedown) python software. It must
+Conversion of Rmarkdown (`.Rmd`) or Quarto (`.Qmd`) vignettes to Jupyter
+(\`.ipynb) notebooks uses [Quarto](https://quarto.org) software. It must
 be available from within *R*, e.g.,
 
-    system2("notedown", "--version")
+``` r
+system2("quarto", "--version")
+```
 
-Creating or updating workspaces
-===============================
+The user must determine if they want their vignettes converted or
+rendered into Jupyter notebooks. The difference is that `render`
+automatically executes *R* code blocks and embeds images, while
+`convert` will not.
+
+Use of Python *notedown* for conversion is no longer supported.
+
+# Creating or updating workspaces
 
 **CAUTION** updating an existing workspace will replace existing content
 in a way that cannot be undone – you will lose content!
 
 Workspace creation or update uses information from the DESCRIPTION file,
-and from the YAML metadata at the top of vignettes. It is therefore
-worth-while to make sure this information is accurate.
+CSV files in inst/tables, and from the YAML metadata at the top of
+vignettes. It is therefore worth-while to make sure this information is
+accurate.
 
-In the DESCRIPTION file, the Title, Version, Authors@R (preferred) or
-Author / Maintainer fields, Description, and License fields are used.
+In the DESCRIPTION file, the Title, Version, Date, <Authors@R>
+(preferred) or Author / Maintainer fields, Description, and License
+fields are used.
 
-In vignettes, the title: and author: name: fields are used; the abstract
+Tables in inst/tables must be CSV files. Individual entries in the CSV
+file may contain ‘whisker’ expressions for variable substitution, as
+follows:
+
+- `{{ bucket }}`: the bucket location of the (possibly newly create)
+  workspace, as returned by `avbucket()`.
+
+Tables are processed first with `whisker.render()` for variable
+substitution, and then `readr::read_csv()` and `avtable_import()`.Q
+
+In vignettes, the title: and author: name: fields are used. The abstract
 is a good candidate for future inclusion.
 
-From package source
--------------------
+## From package source
 
 The one-stop route is to create a workspace from the package source
-(e.g., github checkout) directory use `as_workspace()`.
+(e.g., github checkout) directory using `as_workspace()`.
 
-    AnVILPublish::as_workspace(
-        "path/to/package",
-        "bioconductor-rpci-anvil",     # i.e., billing account
-        create = TRUE                  # use update = TRUE for an existing workspace
-    )
+``` r
+AnVILPublish::as_workspace(
+    "path/to/package",
+    "bioconductor-rpci-anvil",     # i.e., billing account
+    create = TRUE                  # use update = TRUE for an existing workspace
+)
+```
 
 Use `create = TRUE` to create a new workspace. Use `update = TRUE` to
 update (and potentially overwrite) an existing workspace. One of
 `create` and `update` must be TRUE. The command illustrated above does
 not specify the `name =` argument, so creates or updates a workspace
 `"Bioconductor-Package-<pkgname>`, where `<pkgname>` is the name of the
-package read from the DESCRIPTION file; provide an explict name to
-create or update an arbitrary workspace.
+package read from the DESCRIPTION file; provide an explicit name to
+create or update an arbitrary workspace. The option `use_readme = TRUE`
+appends a README.md file to the formatted content of DESCRIPTION file.
 
-`AnVILPublish::as_workspace()` invokes `as_notebook()` and `add_user()`,
-so these steps do not need to be performed ‘by hand’.
+`AnVILPublish::as_workspace()` invokes `as_notebook()` so this step does
+not need to be performed ‘by hand’.
 
-From collections of Rmd files
------------------------------
+See the command `add_access()`, below, to make the workspace available
+to a wider audience.
 
-Some *R* resources, e.g., \[bookdown\]\[\] sites, are not in packages.
-These can be processed to tow workspaces with minor modifications.
+## From collections of Rmd files
+
+Some *R* resources, e.g., [bookdown](https://bookdown.org/) sites, are
+not in packages. These can be processed to workspaces with minor
+modifications.
 
 1.  Add a standard DESCRIPTION file (e.g.,
     `use_this::use_description()`) to the directory containing the
@@ -99,7 +130,7 @@ These can be processed to tow workspaces with minor modifications.
 2.  Use the `Package:` field to provide a one-word identifier (e.g.,
     `Package: Bioc2020_CNV`) for your material. Add a key-value pair
     `Type: Workshop` or similar. The `Pacakge:` and `Type:` fields will
-    will be used to create the workspace name as, in the example here,
+    be used to create the workspace name as, in the example here,
     `Bioconductor-Workshop-Bioc2020_CNV`.
 
 3.  Add a ‘yaml’ chunk to the top of each .Rmd file, if not already
@@ -115,67 +146,66 @@ These can be processed to tow workspaces with minor modifications.
 
 Publish the resources with
 
-    AnVILPublish::as_workspace(
-        "path/to/directory",      # directory containing DESCRIPTION file
-        "bioconductor-rpci-anvil",
-        create = TRUE
-    )
+``` r
+AnVILPublish::as_workspace(
+    "path/to/directory",      # directory containing DESCRIPTION file
+    "bioconductor-rpci-anvil",
+    create = TRUE
+)
+```
 
-Updating notebooks or workspace permissions
-===========================================
+# Updating notebooks or workspace permissions
 
 These steps are performed automatically by `as_workspace()`, but may be
 useful when developing a new workspace or revising existing workspaces.
 
-Updating workspace notebooks from vignettes
--------------------------------------------
+## Updating workspace notebooks from vignettes
 
 Transforming vignettes to notebooks may require several iterations, and
 is available as a separate operation. Use `update = FALSE` to create
 local copies for preview.
 
-    AnVIL::Publish::as_notebook(
-        "paths/to/files.Rmd",
-        "bioconductor-rpci-anvil",     # i.e., billing account
-        "Bioconductor-Package-Foo",    # Workspace name
-        update = FALSE                 # make notebooks, but do not update workspace
-    )
+``` r
+AnVILPublish::as_notebook(
+    "paths/to/files.Rmd",
+    "bioconductor-rpci-anvil",     # i.e., billing account
+    "Bioconductor-Package-Foo",    # Workspace name
+    update = FALSE                 # make notebooks, but do not update workspace
+)
+```
 
 The vignette transformation process has several limitations. Only `.Rmd`
 vignettes are supported. Currently, the vignette is transformed first to
 a markdown document using the `rmarkdown` command
 `render(..., md_document())`. The markdown document is then translated
-to python notebook using `notedown`.
+to Python notebook using `quarto`.
 
 It is likely that some of the limitations of vignette rendering can be
 reduced.
 
-Adding user access credentiials to share the notebook
------------------------------------------------------
+## Adding user access credentials to share the notebook
 
 The `"Bioconductor_User"` group can be added to the entities that can
-see the workspace. AnVIL users wishing to view the worksppace should be
+see the workspace. AnVIL users wishing to view the workspace should be
 added to the `Bioconductor_User` group, rather than to the workspace
 directly. To add the user group, use
 
-    AnVILPublish::add_user(
-        "bioconductor-rpci-anvil",
-        "Bioconductor-Package-Foo"
-    )
+``` r
+AnVILPublish::add_access(
+    "bioconductor-rpci-anvil",
+    "Bioconductor-Package-Foo"
+)
+```
 
-Vignette and .Rmd best practices
-================================
+# Vignette and .Rmd best practices
 
-Orientation
------------
+## Orientation
 
-`.Rmd` files need to be converted to jupyter notebooks. Currently there
-is not an ‘ideal’ solution, with details listed in the ‘Additional
-notes…’ section. Consequently, there are ‘best practices’ that lead to
-results that are more likely to be satisfactory, as outlined here.
+`.Rmd` files need to be converted to jupyter notebooks. These ‘best
+practices’ lead to results that are more likely to be satisfactory, as
+outlined here.
 
-Best practices
---------------
+## Best practices
 
 1.  For packages, make sure the DESCRIPTION file is complete. Use the
     `Authors@R` notation for fully specifying authors. Add a `Date:`
@@ -249,74 +279,41 @@ Best practices
 
 6.  Although both Rmarkdown and python notebooks support code chunks in
     multiple languages, there is no support for this in the conversion
-    procdess – all cells are presented as *R* code.
+    process – all cells are presented as *R* code.
 
-Additional notes on .Rmd conversion
------------------------------------
+## Additional notes on .Rmd conversion
 
-The current state of affairs with respect to notebook conversion is
-imperfect. Conversion is currently a two-step process: Rmarkdown to
-markdown, and markdown to ipynb.
+Current best practice is to use [quarto](https://quarto.org) for
+conversion of .Rmd to ipynb. Quarto is available on the Bioconductor
+docker image, or easily installed on Linux, macOS, or Windows.
 
--   The conversion from Rmarkdown to markdown is currently accomplished
-    with
+Support for conversion using the Python *notedown* module is no longer
+supported.
 
-        knitr::opts_chunk$set(eval=FALSE)
-        rmarkdown::render(..., md_document())
+# Session info
 
-    to create a markdown document from the `.Rmd` source.
+``` r
+sessionInfo()
+```
 
-    This correctly processes the markdown content, including yaml
-    metadata, but renders all code chunks identically.
-
-    Using other knitr options may allow, e.g., conditional inclusion of
-    code chunks.
-
--   Use [`notedown`](https://github.com/aaren/notedown) to convert from
-    markdown to jupyter notebook, adding metadata to indicate that the
-    notebook has an *R* kernel.
-
-Here are some notes on alternative solutions.
-
--   [`jupytext`](https://github.com/mwouts/jupytext) (version 1.5.1) but
-    has difficulty with some markdown. For instance, reference-style
-    links `[foo][1]` are only rendered correctly when the reference is
-    in the same code chunk as the link. It is under active development
-    and may mature into a possible alternative.
-
--   `pandoc` (version 2.10.1) provides a one-step convertion from `.Rmd`
-    to .`ipynb`, but code chunks are rendered as pre-formatted text
-    rather than evaluable cell.
-
--   [`notedown`](https://github.com/aaren/notedown) (version 1.5.1) also
-    provides one-step conversion, but does not exclude yaml from
-    vignettes. The project has not had commits for several years, and
-    has several open issues.
-
-Session info
-============
-
-    sessionInfo()
-
-    ## R version 4.0.2 (2020-06-22)
-    ## Platform: x86_64-pc-linux-gnu (64-bit)
-    ## Running under: Ubuntu 20.04.1 LTS
+    ## R version 4.3.0 Patched (2023-05-01 r84362)
+    ## Platform: aarch64-apple-darwin21.6.0 (64-bit)
+    ## Running under: macOS Monterey 12.6.6
     ## 
     ## Matrix products: default
-    ## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.9.0
-    ## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.9.0
+    ## BLAS:   /Users/ma38727/bin/R-4-3-branch/lib/libRblas.dylib 
+    ## LAPACK: /Users/ma38727/bin/R-4-3-branch/lib/libRlapack.dylib;  LAPACK version 3.11.0
     ## 
     ## locale:
-    ##  [1] LC_CTYPE=C.UTF-8       LC_NUMERIC=C           LC_TIME=C.UTF-8       
-    ##  [4] LC_COLLATE=C.UTF-8     LC_MONETARY=C.UTF-8    LC_MESSAGES=C.UTF-8   
-    ##  [7] LC_PAPER=C.UTF-8       LC_NAME=C              LC_ADDRESS=C          
-    ## [10] LC_TELEPHONE=C         LC_MEASUREMENT=C.UTF-8 LC_IDENTIFICATION=C   
+    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+    ## 
+    ## time zone: America/New_York
+    ## tzcode source: internal
     ## 
     ## attached base packages:
     ## [1] stats     graphics  grDevices utils     datasets  methods   base     
     ## 
     ## loaded via a namespace (and not attached):
-    ##  [1] compiler_4.0.2  magrittr_1.5    tools_4.0.2     htmltools_0.5.0
-    ##  [5] yaml_2.2.1      stringi_1.4.6   rmarkdown_2.3   knitr_1.29     
-    ##  [9] stringr_1.4.0   xfun_0.16       digest_0.6.25   rlang_0.4.7    
-    ## [13] evaluate_0.14
+    ##  [1] compiler_4.3.0  fastmap_1.1.1   cli_3.6.1       tools_4.3.0    
+    ##  [5] htmltools_0.5.5 yaml_2.3.7      rmarkdown_2.22  knitr_1.43     
+    ##  [9] xfun_0.39       digest_0.6.31   rlang_1.1.1     evaluate_0.21
