@@ -1,4 +1,10 @@
-# AnVILPublis 1.10.0
+# AnVILPublish 1.12.0
+
+## Bug Fixes
+
+- (v. 1.11.3) Link Rmd (and / or ipynb) vignettes to dashboard
+
+# AnVILPublish 1.10.0
 
 - (v. 1.11.1) Remove support for `notedown` Python module conversion.
 
