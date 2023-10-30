@@ -61,7 +61,7 @@
     descr
 }
 
-.package_depenencies <-
+.package_dependencies <-
     function(path)
 {
     package <- basename(path)
@@ -215,12 +215,12 @@ as_workspace <-
     type <- match.arg(type)
     quarto <- match.arg(quarto)
     stopifnot(
-        .is_scalar_character(path), dir.exists(path),
-        .is_scalar_character(namespace),
-        .is_scalar_character(name) || is.null(name),
-        .is_scalar_logical(create),
-        .is_scalar_logical(update),
-        .is_scalar_logical(use_readme),
+        isScalarCharacter(path), dir.exists(path),
+        isScalarCharacter(namespace),
+        isScalarCharacter(name) || is.null(name),
+        isScalarLogical(create),
+        isScalarLogical(update),
+        isScalarLogical(use_readme),
         !use_readme || file.exists(file.path(path, "README.md"))
     )
     path <- normalizePath(path)
@@ -261,7 +261,7 @@ as_workspace <-
     !(create || update) || .set_tables(path, namespace, name)
 
     ## create setup notebook
-    setup <- .package_depenencies(path)
+    setup <- .package_dependencies(path)
     data <- c(data, setup)
     tmpl <- .template("setup-notebook.tmpl")
     setup_notebook <- whisker.render(tmpl, data)
