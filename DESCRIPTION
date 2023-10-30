@@ -27,6 +27,7 @@ License: Artistic-2.0
 Imports:
     AnVIL,
     BiocBaseUtils,
+    BiocManager,
     httr,
     jsonlite,
     rmarkdown,
@@ -39,7 +40,6 @@ Imports:
 Suggests:
     knitr,
     BiocStyle,
-    BiocManager,
     testthat (>= 3.0.0)
 biocViews: Infrastructure, Software
 Encoding: UTF-8
