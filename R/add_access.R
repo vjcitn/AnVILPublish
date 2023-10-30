@@ -35,13 +35,15 @@
 #'
 #' @return `add_access()` returns TRUE, invisibly.
 #'
+#' @importFrom BiocBaseUtils isScalarCharacter
+#'
 #' @export
 add_access <-
     function(namespace, name)
 {
     stopifnot(
-        .is_scalar_character(namespace),
-        .is_scalar_character(name)
+        isScalarCharacter(namespace),
+        isScalarCharacter(name)
     )
     .update_workspace_acl(namespace, name)
     return(invisible(TRUE))

@@ -179,6 +179,8 @@
 #' @return `as_notebook()` returns the paths to the local (if `update
 #'     = FALSE`) or the workspace notebooks.
 #'
+#' @importFrom BiocBaseUtils isCharacter isScalarCharacter
+#'
 #' @export
 as_notebook <-
     function(
@@ -189,10 +191,10 @@ as_notebook <-
     type = match.arg(type)
     quarto = match.arg(quarto)
     stopifnot(
-        .is_character_n(rmd_paths), all(file.exists(rmd_paths)),
-        .is_scalar_character(namespace),
-        .is_scalar_character(name),
-        .is_scalar_logical(update)
+        isCharacter(rmd_paths), all(file.exists(rmd_paths)),
+        isScalarCharacter(namespace),
+        isScalarCharacter(name),
+        isScalarLogical(update)
     )
 
     notebooks <- character(0)

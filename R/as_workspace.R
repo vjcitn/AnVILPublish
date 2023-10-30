@@ -205,6 +205,7 @@
 #'     invisibly.
 #'
 #' @importFrom whisker whisker.render
+#' @importFrom BiocBaseUtils isScalarLogical
 #'
 #' @export
 as_workspace <-
