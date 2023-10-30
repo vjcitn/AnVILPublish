@@ -39,6 +39,13 @@ if (!"AnVILPublish" %in% rownames(installed.packages()))
     BiocManager::install("AnVILPublish")
 ```
 
+# Requirements 
+
+**Note**. The package currently works for Google Cloud Platform workspaces and
+does _NOT_ support AnVIL workspaces that use the Azure platform.
+
+## Best practices
+
 There are only a small number of functions in the package; it is
 likely best practice to invoke these using `AnVILPublish::...()`
 rather than attaching the package to the search path.
@@ -60,7 +67,7 @@ AnVIL::gcloud_account()
 AnVIL::gcloud_project()
 ```
 
-Note that these be used to set, as well as interrogate, the acount and project.
+Note that these be used to set, as well as interrogate, the account and project.
 
 [1]: https://cloud.google.com/sdk
 
@@ -101,19 +108,19 @@ Tables in inst/tables must be CSV files. Individual entries in the CSV
 file may contain 'whisker' expressions for variable substitution, as
 follows:
 
-- `{{ bucket }}`: the bucket location of the (possibly newly create)
+- `{{ bucket }}`: the bucket location of the (possibly newly created)
   workspace, as returned by `avbucket()`.
   
 Tables are processed first with `whisker.render()` for variable
-substitution, and then `readr::read_csv()` and `avtable_import()`.Q
+substitution, and then `readr::read_csv()` and `avtable_import()`.
 
-In vignettes, the title: and author: name: fields are used. The abstract
+In vignettes, the `title:`, `author:`, and `name:` fields are used. The abstract
 is a good candidate for future inclusion.
 
 ## From package source
 
-The one-stop route is to create a workspace from the package source
-(e.g., github checkout) directory using `as_workspace()`.
+The one-stop route is to create a workspace from the local package source
+(e.g., GitHub checkout) directory using `as_workspace()`.
 
 ```{r, eval = FALSE}
 AnVILPublish::as_workspace(
@@ -129,8 +136,8 @@ update (and potentially overwrite) an existing workspace. One of
 not specify the `name =` argument, so creates or updates a workspace
 `"Bioconductor-Package-<pkgname>`, where `<pkgname>` is the name of
 the package read from the DESCRIPTION file; provide an explicit name
-to create or update an arbitrary workspace. The option `use_readme =
-TRUE` appends a README.md file to the formatted content of DESCRIPTION
+to create or update an arbitrary workspace. The option `use_readme = TRUE`
+appends a `README.md` file to the formatted content of the `DESCRIPTION`
 file.
 
 `AnVILPublish::as_workspace()` invokes `as_notebook()` so this step
@@ -152,12 +159,12 @@ modifications.
    `.Rmd` files.
 
 1. Use the `Package:` field to provide a one-word identifier (e.g.,
-   `Package: Bioc2020_CNV`) for your material. Add a key-value pair
+   `Package: Bioc2020CNV`) for your material. Add a key-value pair
    `Type: Workshop` or similar. The `Pacakge:` and `Type:` fields will
    be used to create the workspace name as, in the example here,
-   `Bioconductor-Workshop-Bioc2020_CNV`.
+   `Bioconductor-Workshop-Bioc2020CNV`.
 
-1. Add a 'yaml' chunk to the top of each .Rmd file, if not already
+1. Add a 'yaml' chunk to the top of each `.Rmd` file, if not already
    present, including the title and (optionally) name information,
    e.g.,
 
