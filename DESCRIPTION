@@ -1,6 +1,6 @@
 Package: AnVILPublish
 Title: Publish Packages and Other Resources to AnVIL Workspaces
-Version: 1.13.3
+Version: 1.14.0
 Authors@R: c(
     person(
         "Marcel", "Ramos", role = c("aut", "cre"),
