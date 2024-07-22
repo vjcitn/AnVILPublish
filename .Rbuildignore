@@ -1,2 +1,4 @@
 .github
 ^jupyter_venv
+^.*\.Rproj$
+^\.Rproj\.user$

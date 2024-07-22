@@ -1,3 +1,6 @@
 .Rhistory
 vignettes/*R
 vignettes/*html
+.Rproj.user
+*.Rproj
+*_cache
