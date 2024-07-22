@@ -19,16 +19,14 @@ vignette: |
   %\VignetteEncoding{UTF-8}
 ---
 
-# Introduction
+# AnVILPublish
 
-This package produces AnVIL workspaces from R packages. An example
-uses the new [Gen3][4] package as a basis for the
-[Bioconductor-Package-Gen3][3] workspace (permission to access this
-workspace is required, but there are no restrictions on granting
-permission).
-
-[4]: https://github.com/Bioconductor/Gen3
-[3]: https://anvil.terra.bio/#workspaces/bioconductor-rpci-anvil/Bioconductor-Package-Gen3
+This package produces AnVIL workspaces from R packages. Use this package to
+create or update AnVIL workspaces from resources such as R / Bioconductor
+packages. The metadata about the package (e.g., select information from the
+package `DESCRIPTION` file and from vignette `YAML` headings) are used to
+populate the 'DASHBOARD' page on AnVIL. Vignettes are translated to python
+notebooks ready for evaluation in AnVIL.
 
 ## Package installation
 
@@ -56,15 +54,15 @@ It is necessary to have the [gcloud SDK][1] available to copy notebook
 files to the workspace. Test availability with
 
 ```{r, eval = FALSE}
-AnVIL::gcloud_exists()
+AnVILGCP::gcloud_exists()
 ```
 
 and verify that the account and project are appropriate (consistent
 with AnVIL credentials) for use with AnVIL
 
 ```{r, eval = FALSE}
-AnVIL::gcloud_account()
-AnVIL::gcloud_project()
+AnVILGCP::gcloud_account()
+AnVILGCP::gcloud_project()
 ```
 
 Note that these be used to set, as well as interrogate, the account and project.
