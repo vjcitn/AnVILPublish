@@ -1,15 +1,12 @@
-Publishing R / Bioconductor Packages To AnVIL Workspaces
-================
-true
 
-# Introduction
+# AnVILPublish
 
-This package produces AnVIL workspaces from R packages. An example uses
-the new [Gen3](https://github.com/Bioconductor/Gen3) package as a basis
-for the
-[Bioconductor-Package-Gen3](https://anvil.terra.bio/#workspaces/bioconductor-rpci-anvil/Bioconductor-Package-Gen3)
-workspace (permission to access this workspace is required, but there
-are no restrictions on granting permission).
+This package produces AnVIL workspaces from R packages. Use this package
+to create or update AnVIL workspaces from resources such as R /
+Bioconductor packages. The metadata about the package (e.g., select
+information from the package `DESCRIPTION` file and from vignette `YAML`
+headings) are used to populate the ‘DASHBOARD’ page on AnVIL. Vignettes
+are translated to python notebooks ready for evaluation in AnVIL.
 
 ## Package installation
 
@@ -19,6 +16,14 @@ If necessary, install the AnVILPublish library
 if (!"AnVILPublish" %in% rownames(installed.packages()))
     BiocManager::install("AnVILPublish")
 ```
+
+# Requirements
+
+**Note**. The package currently works for Google Cloud Platform
+workspaces and does *NOT* support AnVIL workspaces that use the Azure
+platform.
+
+## Best practices
 
 There are only a small number of functions in the package; it is likely
 best practice to invoke these using `AnVILPublish::...()` rather than
@@ -31,18 +36,18 @@ available to copy notebook files to the workspace. Test availability
 with
 
 ``` r
-AnVIL::gcloud_exists()
+AnVILGCP::gcloud_exists()
 ```
 
 and verify that the account and project are appropriate (consistent with
 AnVIL credentials) for use with AnVIL
 
 ``` r
-AnVIL::gcloud_account()
-AnVIL::gcloud_project()
+AnVILGCP::gcloud_account()
+AnVILGCP::gcloud_project()
 ```
 
-Note that these be used to set, as well as interrogate, the acount and
+Note that these be used to set, as well as interrogate, the account and
 project.
 
 ## `Quarto` software
@@ -80,19 +85,19 @@ Tables in inst/tables must be CSV files. Individual entries in the CSV
 file may contain ‘whisker’ expressions for variable substitution, as
 follows:
 
-- `{{ bucket }}`: the bucket location of the (possibly newly create)
+- `{{ bucket }}`: the bucket location of the (possibly newly created)
   workspace, as returned by `avbucket()`.
 
 Tables are processed first with `whisker.render()` for variable
-substitution, and then `readr::read_csv()` and `avtable_import()`.Q
+substitution, and then `readr::read_csv()` and `avtable_import()`.
 
-In vignettes, the title: and author: name: fields are used. The abstract
-is a good candidate for future inclusion.
+In vignettes, the `title:`, `author:`, and `name:` fields are used. The
+abstract is a good candidate for future inclusion.
 
 ## From package source
 
-The one-stop route is to create a workspace from the package source
-(e.g., github checkout) directory using `as_workspace()`.
+The one-stop route is to create a workspace from the local package
+source (e.g., GitHub checkout) directory using `as_workspace()`.
 
 ``` r
 AnVILPublish::as_workspace(
@@ -109,7 +114,8 @@ not specify the `name =` argument, so creates or updates a workspace
 `"Bioconductor-Package-<pkgname>`, where `<pkgname>` is the name of the
 package read from the DESCRIPTION file; provide an explicit name to
 create or update an arbitrary workspace. The option `use_readme = TRUE`
-appends a README.md file to the formatted content of DESCRIPTION file.
+appends a `README.md` file to the formatted content of the `DESCRIPTION`
+file.
 
 `AnVILPublish::as_workspace()` invokes `as_notebook()` so this step does
 not need to be performed ‘by hand’.
@@ -128,12 +134,12 @@ modifications.
     `.Rmd` files.
 
 2.  Use the `Package:` field to provide a one-word identifier (e.g.,
-    `Package: Bioc2020_CNV`) for your material. Add a key-value pair
+    `Package: Bioc2020CNV`) for your material. Add a key-value pair
     `Type: Workshop` or similar. The `Pacakge:` and `Type:` fields will
     be used to create the workspace name as, in the example here,
-    `Bioconductor-Workshop-Bioc2020_CNV`.
+    `Bioconductor-Workshop-Bioc2020CNV`.
 
-3.  Add a ‘yaml’ chunk to the top of each .Rmd file, if not already
+3.  Add a ‘yaml’ chunk to the top of each `.Rmd` file, if not already
     present, including the title and (optionally) name information,
     e.g.,
 
@@ -294,26 +300,32 @@ supported.
 
 ``` r
 sessionInfo()
+#> R version 4.4.1 Patched (2024-06-25 r86866)
+#> Platform: x86_64-pc-linux-gnu
+#> Running under: Ubuntu 22.04.4 LTS
+#> 
+#> Matrix products: default
+#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
+#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+#> 
+#> locale:
+#>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
+#>  [3] LC_TIME=en_US.UTF-8        LC_COLLATE=en_US.UTF-8    
+#>  [5] LC_MONETARY=en_US.UTF-8    LC_MESSAGES=en_US.UTF-8   
+#>  [7] LC_PAPER=en_US.UTF-8       LC_NAME=C                 
+#>  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+#> [11] LC_MEASUREMENT=en_US.UTF-8 LC_IDENTIFICATION=C       
+#> 
+#> time zone: America/New_York
+#> tzcode source: system (glibc)
+#> 
+#> attached base packages:
+#> [1] stats     graphics  grDevices utils     datasets  methods   base     
+#> 
+#> loaded via a namespace (and not attached):
+#>  [1] compiler_4.4.1      BiocManager_1.30.23 fastmap_1.2.0      
+#>  [4] cli_3.6.3           tools_4.4.1         htmltools_0.5.8.1  
+#>  [7] rstudioapi_0.16.0   yaml_2.3.9          codetools_0.2-20   
+#> [10] rmarkdown_2.27      knitr_1.48          xfun_0.45          
+#> [13] digest_0.6.36       rlang_1.1.4         evaluate_0.24.0
 ```
-
-    ## R version 4.3.0 Patched (2023-05-01 r84362)
-    ## Platform: aarch64-apple-darwin21.6.0 (64-bit)
-    ## Running under: macOS Monterey 12.6.6
-    ## 
-    ## Matrix products: default
-    ## BLAS:   /Users/ma38727/bin/R-4-3-branch/lib/libRblas.dylib 
-    ## LAPACK: /Users/ma38727/bin/R-4-3-branch/lib/libRlapack.dylib;  LAPACK version 3.11.0
-    ## 
-    ## locale:
-    ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
-    ## 
-    ## time zone: America/New_York
-    ## tzcode source: internal
-    ## 
-    ## attached base packages:
-    ## [1] stats     graphics  grDevices utils     datasets  methods   base     
-    ## 
-    ## loaded via a namespace (and not attached):
-    ##  [1] compiler_4.3.0  fastmap_1.1.1   cli_3.6.1       tools_4.3.0    
-    ##  [5] htmltools_0.5.5 yaml_2.3.7      rmarkdown_2.22  knitr_1.43     
-    ##  [9] xfun_0.39       digest_0.6.31   rlang_1.1.1     evaluate_0.21
