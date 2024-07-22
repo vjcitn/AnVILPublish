@@ -112,13 +112,13 @@
     ipynb_paths
 }
 
-#' @importFrom AnVIL avbucket gsutil_cp
+#' @importFrom AnVILGCP avstorage avcopy
 .cp_to_cloud_notebooks <-
     function(notebooks, namespace, name)
 {
-    bucket <- avbucket(namespace, name)
+    bucket <- avstorage(namespace, name)
     bucket_notebooks <- paste0(bucket, "/notebooks/")
-    gsutil_cp(notebooks, bucket_notebooks)
+    avcopy(notebooks, bucket_notebooks)
     paste0(bucket_notebooks, basename(notebooks))
 }
 

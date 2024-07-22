@@ -136,7 +136,7 @@
     return(invisible(TRUE))
 }
 
-#' @importFrom AnVIL avbucket avtable_import
+#' @importFrom AnVILGCP avstorage avtable_import
 #'
 #' @importFrom whisker whisker.render
 #'
@@ -145,7 +145,7 @@
     function(table_path, namespace, name)
 {
     data <- list(
-        bucket = avbucket(namespace, name)
+        bucket = avstorage(namespace, name)
     )
 
     txt <- readLines(table_path)
