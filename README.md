@@ -86,7 +86,7 @@ file may contain ‘whisker’ expressions for variable substitution, as
 follows:
 
 - `{{ bucket }}`: the bucket location of the (possibly newly created)
-  workspace, as returned by `avbucket()`.
+  workspace, as returned by `avstorage()`.
 
 Tables are processed first with `whisker.render()` for variable
 substitution, and then `readr::read_csv()` and `avtable_import()`.
@@ -300,13 +300,12 @@ supported.
 
 ``` r
 sessionInfo()
-#> R version 4.4.1 Patched (2024-06-25 r86866)
+#> R version 4.4.1 Patched (2024-08-13 r87005)
 #> Platform: x86_64-pc-linux-gnu
-#> Running under: Ubuntu 22.04.4 LTS
+#> Running under: Ubuntu 24.04.1 LTS
 #> 
 #> Matrix products: default
-#> BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.10.0 
-#> LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.10.0
+#> BLAS/LAPACK: /usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.26.so;  LAPACK version 3.12.0
 #> 
 #> locale:
 #>  [1] LC_CTYPE=en_US.UTF-8       LC_NUMERIC=C              
@@ -323,9 +322,8 @@ sessionInfo()
 #> [1] stats     graphics  grDevices utils     datasets  methods   base     
 #> 
 #> loaded via a namespace (and not attached):
-#>  [1] compiler_4.4.1      BiocManager_1.30.23 fastmap_1.2.0      
-#>  [4] cli_3.6.3           tools_4.4.1         htmltools_0.5.8.1  
-#>  [7] rstudioapi_0.16.0   yaml_2.3.9          codetools_0.2-20   
-#> [10] rmarkdown_2.27      knitr_1.48          xfun_0.45          
-#> [13] digest_0.6.36       rlang_1.1.4         evaluate_0.24.0
+#>  [1] compiler_4.4.1    fastmap_1.2.0     cli_3.6.3         htmltools_0.5.8.1
+#>  [5] tools_4.4.1       rstudioapi_0.16.0 yaml_2.3.10       codetools_0.2-20 
+#>  [9] rmarkdown_2.28    knitr_1.48        xfun_0.47         digest_0.6.37    
+#> [13] rlang_1.1.4       evaluate_1.0.0
 ```

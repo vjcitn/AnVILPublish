@@ -107,7 +107,7 @@ file may contain 'whisker' expressions for variable substitution, as
 follows:
 
 - `{{ bucket }}`: the bucket location of the (possibly newly created)
-  workspace, as returned by `avbucket()`.
+  workspace, as returned by `avstorage()`.
   
 Tables are processed first with `whisker.render()` for variable
 substitution, and then `readr::read_csv()` and `avtable_import()`.
