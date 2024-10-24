@@ -138,8 +138,9 @@
 .quarto_exists <-
     function()
 {
-    quarto.location <- Sys.which("quarto")
-    nchar(quarto.location) > 0L
+    nzchar(
+        Sys.which("quarto")
+    )
 }
 
 #' @rdname as_notebook
