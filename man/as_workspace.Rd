@@ -28,7 +28,7 @@ to be used.}
 
 \item{update}{\code{logical(1)} Update (over-write the existing
 DASHBOARD and any similarly named notebooks) an existing
-workspace?  If niether \code{create} nore \code{update} is TRUE, the code
+workspace?  If neither \code{create} nor \code{update} is TRUE, the code
 to create a workspace is run but no output generated; this can
 be useful during debugging.}
 
