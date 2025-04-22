@@ -12,7 +12,8 @@ as_workspace(
   update = FALSE,
   use_readme = FALSE,
   type = c("ipynb", "rmd", "both"),
-  quarto = c("render", "convert")
+  quarto = c("render", "convert"),
+  colophon_first = TRUE
 )
 }
 \arguments{
@@ -45,6 +46,14 @@ Quarto vignettes. \code{both} copies both notebooks and vignettes.}
 \item{quarto}{\code{character(1)} If the program Quarto is installed,
 this parameter indicates whether the .Rmd files will be
 rendered or converted.  See vignette for more details.}
+
+\item{colophon_first}{\code{logical(1)} defaults to \code{TRUE}, which is
+the legacy behavior.  Only relevant if \code{use_readme} is \code{TRUE}.
+If \code{colophon_first} is \code{FALSE}, the information on author
+and date, etc. is placed at the bottom of the workspace
+\code{DASHBOARD} description component.  When \code{colophon_first} is
+\code{FALSE}, the package DESCRIPTION Title is suppressed as the
+information is likely redundant with the README.md title.}
 }
 \value{
 \code{as_workspace()} returns the URL of the updated workspace,

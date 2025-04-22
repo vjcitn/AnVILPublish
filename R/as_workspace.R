@@ -200,6 +200,14 @@
 #'     content of README.md in package top-level folder is used with
 #'     the package `DESCRIPTION` version and provenance metadata for
 #'     rendering in the workspace 'DASHBOARD'.
+#' 
+#' @param colophon_first `logical(1)` defaults to `TRUE`, which is
+#'     the legacy behavior.  Only relevant if `use_readme` is `TRUE`.
+#'     If `colophon_first` is `FALSE`, the information on author
+#'     and date, etc. is placed at the bottom of the workspace 
+#'     `DASHBOARD` description component.  When `colophon_first` is
+#'     `FALSE`, the package DESCRIPTION Title is suppressed as the
+#'     information is likely redundant with the README.md title.
 #'
 #' @return `as_workspace()` returns the URL of the updated workspace,
 #'     invisibly.
@@ -211,7 +219,7 @@
 as_workspace <-
     function(path, namespace, name = NULL, create = FALSE, update = FALSE,
              use_readme = FALSE, type = c('ipynb', 'rmd', 'both'),
-             quarto = c('render', 'convert'))
+             quarto = c('render', 'convert'), colophon_first = TRUE)
 {
     type <- match.arg(type)
     quarto <- match.arg(quarto)
@@ -238,6 +246,7 @@ as_workspace <-
 
     ## populate dashboard from package and vignette metadata
     description <- .package_description(path)
+    if (use_readme && !colophon_first) description$Title = ""   # avoid redundancy if README.md comes first
     vignette_description <- .rmd_vignette_description(path, type)
     processing <- list(
         ProcessDate = Sys.time(),
@@ -254,7 +263,8 @@ as_workspace <-
     if (use_readme) {
         rmepath <- file.path(path, "README.md")
         rme <- paste(readLines(rmepath), collapse="\n")
-        dashboard <- paste(dashboard, rme, collapse="\n")
+        if (colophon_first) dashboard <- paste(dashboard, rme, collapse="\n")
+          else dashboard <- paste(rme, "\n", dashboard, collapse="\n")
     }
 
     !(create || update) || .set_dashboard(dashboard, namespace, name)
